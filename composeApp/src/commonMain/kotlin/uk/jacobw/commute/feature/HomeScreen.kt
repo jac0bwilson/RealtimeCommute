@@ -19,12 +19,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.getKoin
 import realtimecommute.composeapp.generated.resources.Res
 import realtimecommute.composeapp.generated.resources.compose_multiplatform
-import uk.jacobw.commute.Greeting
+import uk.jacobw.commute.Platform
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    platform: Platform = getKoin().get()
+) {
     var showContent by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -45,10 +48,9 @@ fun HomeScreen() {
                 Text("Click me!")
             }
             AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+                    Text("Compose: Hello, ${platform.name}")
                 }
             }
         }
