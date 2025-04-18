@@ -8,9 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,7 +29,8 @@ import realtimecommute.composeapp.generated.resources.compose_multiplatform
 import uk.jacobw.commute.Platform
 
 @Composable
-fun HomeScreen(
+fun Sample(
+    onNavigationIconPressed: () -> Unit,
     platform: Platform = getKoin().get()
 ) {
     var showContent by remember { mutableStateOf(false) }
@@ -33,7 +38,17 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Realtime Commute") }
+                title = { Text("Sample Code") },
+                navigationIcon = {
+                    IconButton(
+                        onClick = onNavigationIconPressed
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Navigate back"
+                        )
+                    }
+                }
             )
         },
         contentWindowInsets = WindowInsets.systemBars,
