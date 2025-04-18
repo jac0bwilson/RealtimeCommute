@@ -4,7 +4,10 @@ import ComposeApp
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        MainViewControllerKt.MainViewController()
+        let uiController = UINavigationController( rootViewController: MainViewControllerKt.MainViewController())
+        uiController.interactivePopGestureRecognizer?.isEnabled = true
+        uiController.isNavigationBarHidden = true
+        return uiController
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
