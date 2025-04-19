@@ -48,24 +48,29 @@ fun Home(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
-            ElevatedCard(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Where are you going?",
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            }
+            JourneyInput()
+        }
+    }
+}
+
+@Composable
+private fun JourneyInput() {
+    ElevatedCard(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Where are you going?",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
