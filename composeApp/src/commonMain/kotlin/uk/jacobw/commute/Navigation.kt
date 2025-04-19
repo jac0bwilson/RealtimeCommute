@@ -3,20 +3,21 @@ package uk.jacobw.commute
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import uk.jacobw.commute.feature.Home
-import uk.jacobw.commute.feature.Sample
+import uk.jacobw.commute.feature.home.HomeLayout
+import uk.jacobw.commute.feature.home.HomeScreen
+import uk.jacobw.commute.feature.sample.SampleScreen
 
 fun NavGraphBuilder.featureGraph(
     navController: NavController,
 ) {
     composable(route = Routes.HOME.name) {
-        Home(
+        HomeScreen(
             onNavigateToSample = { navController.navigate(Routes.SAMPLE.name) }
         )
     }
 
     composable(route = Routes.SAMPLE.name) {
-        Sample(
+        SampleScreen(
             onNavigationIconPressed = { navController.popBackStack() }
         )
     }

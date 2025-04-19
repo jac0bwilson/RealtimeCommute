@@ -1,4 +1,4 @@
-package uk.jacobw.commute.feature
+package uk.jacobw.commute.feature.sample
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -29,7 +29,7 @@ import uk.jacobw.commute.Platform
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sample(
+fun SampleScreen(
     onNavigationIconPressed: () -> Unit,
     platform: Platform = getKoin().get()
 ) {
