@@ -3,18 +3,17 @@ package uk.jacobw.commute.feature
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +27,7 @@ import realtimecommute.composeapp.generated.resources.Res
 import realtimecommute.composeapp.generated.resources.compose_multiplatform
 import uk.jacobw.commute.Platform
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sample(
     onNavigationIconPressed: () -> Unit,
@@ -51,7 +51,6 @@ fun Sample(
                 }
             )
         },
-        contentWindowInsets = WindowInsets.systemBars,
     ) { internalPadding ->
         Column(
             modifier = Modifier
