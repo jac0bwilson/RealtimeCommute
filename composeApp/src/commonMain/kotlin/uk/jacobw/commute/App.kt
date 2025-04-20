@@ -12,6 +12,7 @@ import org.koin.compose.KoinMultiplatformApplication
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.dsl.koinConfiguration
 import uk.jacobw.commute.di.appModule
+import uk.jacobw.commute.di.platformModule
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -19,7 +20,7 @@ import uk.jacobw.commute.di.appModule
 fun App() {
     KoinMultiplatformApplication(
         config = koinConfiguration {
-            modules(appModule)
+            modules(platformModule, appModule)
         }
     ) {
         MaterialTheme(
