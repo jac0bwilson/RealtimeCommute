@@ -4,7 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,11 +26,19 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -34,12 +47,14 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import uk.jacobw.commute.data.database.RouteEntity
+import uk.jacobw.commute.data.model.Station
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeLayout(
     from: String,
     to: String,
+    stationOptions: List<Station>,
     routes: List<RouteEntity>,
     onNavigateToSample: () -> Unit,
     updateFrom: (String) -> Unit,
@@ -81,6 +96,7 @@ fun HomeLayout(
             JourneyInput(
                 from = from,
                 to = to,
+                stationOptions = stationOptions,
                 updateFrom = updateFrom,
                 updateTo = updateTo,
                 addRoute = addRoute,
@@ -139,6 +155,7 @@ private fun SavedRoutes(
 private fun JourneyInput(
     from: String,
     to: String,
+    stationOptions: List<Station>,
     updateFrom: (String) -> Unit,
     updateTo: (String) -> Unit,
     addRoute: () -> Unit,
@@ -163,30 +180,20 @@ private fun JourneyInput(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = from,
-                onValueChange = updateFrom,
-                label = { Text("From") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Next
-                )
+            StationInput(
+                stationOptions = stationOptions,
+                currentValue = from,
+                setValue = updateFrom,
+                label = "From",
+                keyboardImeAction = ImeAction.Next,
             )
 
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = to,
-                onValueChange = updateTo,
-                label = { Text("To") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Done
-                ),
+            StationInput(
+                stationOptions = stationOptions,
+                currentValue = to,
+                setValue = updateTo,
+                label = "To",
+                keyboardImeAction = ImeAction.Done,
                 keyboardActions = KeyboardActions(
                     onDone = {
                         keyboardController?.hide()
@@ -204,6 +211,73 @@ private fun JourneyInput(
                     contentDescription = null
                 )
                 Text("Search")
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun StationInput(
+    stationOptions: List<Station>,
+    currentValue: String,
+    setValue: (String) -> Unit,
+    label: String,
+    keyboardImeAction: ImeAction,
+    keyboardActions: KeyboardActions = KeyboardActions()
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val filteredOptions = stationOptions.filter {
+        val currentLower = currentValue.lowercase()
+        it.stationName.lowercase().contains(currentLower) || it.crsCode.lowercase().contains(currentLower)
+    }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(MenuAnchorType.PrimaryEditable),
+            value = currentValue,
+            onValueChange = setValue,
+            label = { Text(label) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words,
+                imeAction = keyboardImeAction
+            ),
+            keyboardActions = keyboardActions,
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded,
+                    modifier = Modifier.menuAnchor(MenuAnchorType.SecondaryEditable)
+                )
+            }
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(250.dp)
+                    .width(300.dp)
+            ) {
+                LazyColumn {
+                    items(filteredOptions) { item ->
+                        DropdownMenuItem(
+                            text = { Text("${item.crsCode} - ${item.stationName}") },
+                            onClick = {
+                                setValue(item.stationName)
+                                expanded = false
+                            }
+                        )
+                    }
+                }
             }
         }
     }
