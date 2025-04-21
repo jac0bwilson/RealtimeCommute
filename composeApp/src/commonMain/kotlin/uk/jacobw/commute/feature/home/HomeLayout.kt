@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -27,6 +28,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
@@ -111,7 +113,9 @@ private fun SavedRoutes(
                 ) {
                     Text(
                         it.from,
-                        modifier = Modifier.align(Alignment.CenterStart),
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .fillMaxWidth(0.4f),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Icon(
@@ -120,7 +124,9 @@ private fun SavedRoutes(
                     )
                     Text(
                         it.to,
-                        modifier = Modifier.align(Alignment.CenterEnd),
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .fillMaxWidth(0.4f),
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
@@ -137,6 +143,8 @@ private fun JourneyInput(
     updateTo: (String) -> Unit,
     addRoute: () -> Unit,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     ElevatedCard(
         modifier = Modifier
             .padding(8.dp)
@@ -161,8 +169,9 @@ private fun JourneyInput(
                 value = from,
                 onValueChange = updateFrom,
                 label = { Text("From") },
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
+                    capitalization = KeyboardCapitalization.Words,
                     imeAction = ImeAction.Next
                 )
             )
@@ -173,9 +182,15 @@ private fun JourneyInput(
                 value = to,
                 onValueChange = updateTo,
                 label = { Text("To") },
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
+                    capitalization = KeyboardCapitalization.Words,
                     imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
                 )
             )
 

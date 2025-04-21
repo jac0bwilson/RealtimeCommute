@@ -38,7 +38,7 @@ class HomeViewModel(
 
     fun addRoute() {
         viewModelScope.launch {
-            routeRepository.insertRoute(fromStation, toStation)
+            routeRepository.insertRoute(fromStation.trim(), toStation.trim())
         }
 
         fromStation = ""
