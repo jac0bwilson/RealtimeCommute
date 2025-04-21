@@ -20,13 +20,9 @@ fun HomeScreen(
     val stations = viewModel.stations.collectAsStateWithLifecycle()
 
     HomeLayout(
-        from = viewModel.fromStation,
-        to = viewModel.toStation,
         stationOptions = stations.value,
         routes = routes.value,
         onNavigateToSample = onNavigateToSample,
-        updateFrom = viewModel::updateFromStation,
-        updateTo = viewModel::updateToStation,
         addRoute = viewModel::addRoute,
         deleteAllRoutes = viewModel::deleteAllRoutes,
     )

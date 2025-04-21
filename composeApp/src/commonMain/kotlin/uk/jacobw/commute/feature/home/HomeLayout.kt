@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -46,20 +45,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import uk.jacobw.commute.data.database.RouteEntity
+import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Station
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeLayout(
-    from: String,
-    to: String,
     stationOptions: List<Station>,
-    routes: List<RouteEntity>,
+    routes: List<RouteWithStations>,
     onNavigateToSample: () -> Unit,
-    updateFrom: (String) -> Unit,
-    updateTo: (String) -> Unit,
-    addRoute: () -> Unit,
+    addRoute: (String, String) -> Unit,
     deleteAllRoutes: () -> Unit,
 ) {
     Scaffold(
@@ -94,11 +89,7 @@ fun HomeLayout(
                 .fillMaxWidth()
         ) {
             JourneyInput(
-                from = from,
-                to = to,
                 stationOptions = stationOptions,
-                updateFrom = updateFrom,
-                updateTo = updateTo,
                 addRoute = addRoute,
             )
 
@@ -109,7 +100,7 @@ fun HomeLayout(
 
 @Composable
 private fun SavedRoutes(
-    routes: List<RouteEntity>
+    routes: List<RouteWithStations>
 ) {
     Column(
         modifier = Modifier
@@ -128,7 +119,7 @@ private fun SavedRoutes(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        it.from,
+                        it.originStation.name,
                         modifier = Modifier
                             .align(Alignment.CenterStart)
                             .fillMaxWidth(0.4f),
@@ -139,7 +130,7 @@ private fun SavedRoutes(
                         contentDescription = null
                     )
                     Text(
-                        it.to,
+                        it.destinationStation.name,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
                             .fillMaxWidth(0.4f),
@@ -153,14 +144,18 @@ private fun SavedRoutes(
 
 @Composable
 private fun JourneyInput(
-    from: String,
-    to: String,
     stationOptions: List<Station>,
-    updateFrom: (String) -> Unit,
-    updateTo: (String) -> Unit,
-    addRoute: () -> Unit,
+    addRoute: (String, String) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val origin = remember { mutableStateOf("") }
+    val destination = remember { mutableStateOf("") }
+
+    fun submit() {
+        addRoute(origin.value, destination.value)
+        origin.value = ""
+        destination.value = ""
+    }
 
     ElevatedCard(
         modifier = Modifier
@@ -182,29 +177,30 @@ private fun JourneyInput(
 
             StationInput(
                 stationOptions = stationOptions,
-                currentValue = from,
-                setValue = updateFrom,
+                currentValue = origin.value,
+                setValue = { origin.value = it },
                 label = "From",
                 keyboardImeAction = ImeAction.Next,
             )
 
             StationInput(
                 stationOptions = stationOptions,
-                currentValue = to,
-                setValue = updateTo,
+                currentValue = destination.value,
+                setValue = { destination.value = it },
                 label = "To",
                 keyboardImeAction = ImeAction.Done,
                 keyboardActions = KeyboardActions(
                     onDone = {
                         keyboardController?.hide()
+                        submit()
                     }
                 )
             )
 
             Button(
-                onClick = addRoute,
+                onClick = ::submit,
                 modifier = Modifier.fillMaxWidth(),
-                enabled = from.isNotBlank() && to.isNotBlank()
+                enabled = origin.value.isNotBlank() && destination.value.isNotBlank()
             ) {
                 Icon(
                     imageVector = Icons.Filled.Search,

@@ -1,0 +1,91 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "f2c473519543c5e631b766b04ece775d",
+    "entities": [
+      {
+        "tableName": "RouteEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `originCrsCode` TEXT NOT NULL, `destinationCrsCode` TEXT NOT NULL, FOREIGN KEY(`originCrsCode`) REFERENCES `StationEntity`(`crsCode`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`destinationCrsCode`) REFERENCES `StationEntity`(`crsCode`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originCrsCode",
+            "columnName": "originCrsCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "destinationCrsCode",
+            "columnName": "destinationCrsCode",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "StationEntity",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "originCrsCode"
+            ],
+            "referencedColumns": [
+              "crsCode"
+            ]
+          },
+          {
+            "table": "StationEntity",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "destinationCrsCode"
+            ],
+            "referencedColumns": [
+              "crsCode"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "StationEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crsCode` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`crsCode`))",
+        "fields": [
+          {
+            "fieldPath": "crsCode",
+            "columnName": "crsCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "crsCode"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f2c473519543c5e631b766b04ece775d')"
+    ]
+  }
+}

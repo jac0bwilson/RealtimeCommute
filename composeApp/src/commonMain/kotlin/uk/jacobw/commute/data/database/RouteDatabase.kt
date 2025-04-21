@@ -8,7 +8,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
-@Database(entities = [RouteEntity::class], version = 1)
+@Database(entities = [RouteEntity::class, StationEntity::class], version = 2)
 @ConstructedBy(RouteDatabaseConstructor::class)
 abstract class RouteDatabase : RoomDatabase() {
     abstract fun getDao(): RouteDao
@@ -23,5 +23,6 @@ fun getRouteDatabase(builder: RoomDatabase.Builder<RouteDatabase>): RouteDatabas
     return builder
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
+        .fallbackToDestructiveMigration(true)
         .build()
 }
