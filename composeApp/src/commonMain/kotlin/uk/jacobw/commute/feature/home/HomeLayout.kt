@@ -58,6 +58,7 @@ fun HomeLayout(
     onNavigateToSample: () -> Unit,
     addRoute: (String, String) -> Boolean,
     deleteAllRoutes: () -> Unit,
+    onNavigateToRoute: (RouteWithStations) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -95,14 +96,18 @@ fun HomeLayout(
                 addRoute = addRoute,
             )
 
-            SavedRoutes(routes)
+            SavedRoutes(
+                routes = routes,
+                onNavigateToRoute = onNavigateToRoute,
+            )
         }
     }
 }
 
 @Composable
 private fun SavedRoutes(
-    routes: List<RouteWithStations>
+    routes: List<RouteWithStations>,
+    onNavigateToRoute: (RouteWithStations) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -112,6 +117,7 @@ private fun SavedRoutes(
     ) {
         routes.forEach {
             OutlinedCard(
+                onClick = { onNavigateToRoute(it) },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Box(

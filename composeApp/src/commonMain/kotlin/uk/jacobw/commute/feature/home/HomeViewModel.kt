@@ -59,4 +59,8 @@ class HomeViewModel(
             routeRepository.deleteAllRoutes()
         }
     }
+
+    fun setSelectedRoute(route: RouteWithStations) {
+        routeRepository.selectedRoute.value = route
+    }
 }

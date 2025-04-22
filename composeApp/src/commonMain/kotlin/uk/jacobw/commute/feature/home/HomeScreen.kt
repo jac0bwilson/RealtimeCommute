@@ -1,6 +1,7 @@
 package uk.jacobw.commute.feature.home
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
@@ -9,6 +10,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     onNavigateToSample: () -> Unit,
+    onNavigateToRoute: () -> Unit,
 ) {
     LifecycleStartEffect(Unit) {
         viewModel.loadStations()
@@ -16,14 +18,18 @@ fun HomeScreen(
         onStopOrDispose {}
     }
 
-    val routes = viewModel.routes.collectAsStateWithLifecycle()
-    val stations = viewModel.stations.collectAsStateWithLifecycle()
+    val routes by viewModel.routes.collectAsStateWithLifecycle()
+    val stations by viewModel.stations.collectAsStateWithLifecycle()
 
     HomeLayout(
-        stationOptions = stations.value,
-        routes = routes.value,
+        stationOptions = stations,
+        routes = routes,
         onNavigateToSample = onNavigateToSample,
         addRoute = viewModel::addRoute,
         deleteAllRoutes = viewModel::deleteAllRoutes,
+        onNavigateToRoute = { route ->
+            viewModel.setSelectedRoute(route)
+            onNavigateToRoute()
+        }
     )
 }

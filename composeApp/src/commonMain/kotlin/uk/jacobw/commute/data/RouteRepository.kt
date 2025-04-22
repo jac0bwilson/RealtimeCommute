@@ -1,12 +1,16 @@
 package uk.jacobw.commute.data
 
+import kotlinx.coroutines.flow.MutableStateFlow
 import uk.jacobw.commute.data.database.RouteDao
 import uk.jacobw.commute.data.database.RouteEntity
+import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Station
 
 class RouteRepository(
     private val routeDao: RouteDao
 ) {
+    val selectedRoute = MutableStateFlow<RouteWithStations?>(null)
+
     suspend fun insertRoute(origin: Station, destination: Station) {
         routeDao.insertStation(origin.toStationEntity())
         routeDao.insertStation(destination.toStationEntity())

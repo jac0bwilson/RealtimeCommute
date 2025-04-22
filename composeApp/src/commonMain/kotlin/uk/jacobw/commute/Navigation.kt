@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import uk.jacobw.commute.feature.home.HomeLayout
 import uk.jacobw.commute.feature.home.HomeScreen
+import uk.jacobw.commute.feature.route.RouteScreen
 import uk.jacobw.commute.feature.sample.SampleScreen
 
 fun NavGraphBuilder.featureGraph(
@@ -12,7 +13,8 @@ fun NavGraphBuilder.featureGraph(
 ) {
     composable(route = Routes.HOME.name) {
         HomeScreen(
-            onNavigateToSample = { navController.navigate(Routes.SAMPLE.name) }
+            onNavigateToSample = { navController.navigate(Routes.SAMPLE.name) },
+            onNavigateToRoute = { navController.navigate(Routes.ROUTE.name) }
         )
     }
 
@@ -21,9 +23,16 @@ fun NavGraphBuilder.featureGraph(
             onNavigationIconPressed = { navController.popBackStack() }
         )
     }
+
+    composable(route = Routes.ROUTE.name) {
+        RouteScreen(
+            onNavigationIconPressed = { navController.popBackStack() }
+        )
+    }
 }
 
 enum class Routes {
     HOME,
+    ROUTE,
     SAMPLE,
 }

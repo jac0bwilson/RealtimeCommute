@@ -12,6 +12,7 @@ import uk.jacobw.commute.data.StationRepository
 import uk.jacobw.commute.data.database.RouteDatabase
 import uk.jacobw.commute.data.network.station.StationApi
 import uk.jacobw.commute.feature.home.HomeViewModel
+import uk.jacobw.commute.feature.route.RouteViewModel
 import uk.jacobw.commute.getPlatform
 
 val appModule = module {
@@ -31,4 +32,5 @@ val appModule = module {
     single { StationRepository(get()) }
 
     viewModel { HomeViewModel(get(), get()) }
+    viewModel { RouteViewModel(get()) }
 }
