@@ -40,7 +40,7 @@ class HomeViewModel(
         }
     }
 
-    fun addRoute(origin: String, destination: String) {
+    fun addRoute(origin: String, destination: String): Boolean {
         val originStation = findStationByString(origin)
         val destinationStation = findStationByString(destination)
 
@@ -48,7 +48,10 @@ class HomeViewModel(
             viewModelScope.launch {
                 routeRepository.insertRoute(originStation, destinationStation)
             }
+            return true
         }
+
+        return false
     }
 
     fun deleteAllRoutes() {

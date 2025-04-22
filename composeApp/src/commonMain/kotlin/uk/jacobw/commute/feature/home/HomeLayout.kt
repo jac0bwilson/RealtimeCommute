@@ -23,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -45,6 +44,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.painterResource
+import realtimecommute.composeapp.generated.resources.Res
+import realtimecommute.composeapp.generated.resources.train_icon
 import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Station
 
@@ -54,7 +56,7 @@ fun HomeLayout(
     stationOptions: List<Station>,
     routes: List<RouteWithStations>,
     onNavigateToSample: () -> Unit,
-    addRoute: (String, String) -> Unit,
+    addRoute: (String, String) -> Boolean,
     deleteAllRoutes: () -> Unit,
 ) {
     Scaffold(
@@ -145,16 +147,18 @@ private fun SavedRoutes(
 @Composable
 private fun JourneyInput(
     stationOptions: List<Station>,
-    addRoute: (String, String) -> Unit,
+    addRoute: (String, String) -> Boolean,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val origin = remember { mutableStateOf("") }
     val destination = remember { mutableStateOf("") }
 
     fun submit() {
-        addRoute(origin.value, destination.value)
-        origin.value = ""
-        destination.value = ""
+        val success = addRoute(origin.value, destination.value)
+        if (success) {
+            origin.value = ""
+            destination.value = ""
+        }
     }
 
     ElevatedCard(
@@ -203,10 +207,10 @@ private fun JourneyInput(
                 enabled = origin.value.isNotBlank() && destination.value.isNotBlank()
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Search,
+                    painter = painterResource(Res.drawable.train_icon),
                     contentDescription = null
                 )
-                Text("Search")
+                Text("Track it")
             }
         }
     }
