@@ -61,6 +61,6 @@ class HomeViewModel(
     }
 
     fun setSelectedRoute(route: RouteWithStations) {
-        routeRepository.selectedRoute.value = route
+        routeRepository.selectedRoute = route
     }
 }

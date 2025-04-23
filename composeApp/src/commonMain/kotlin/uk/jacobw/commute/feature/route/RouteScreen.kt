@@ -2,6 +2,7 @@ package uk.jacobw.commute.feature.route
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -11,9 +12,19 @@ fun RouteScreen(
     onNavigationIconPressed: () -> Unit,
 ) {
     val route by viewModel.route.collectAsStateWithLifecycle()
+    val services by viewModel.services.collectAsStateWithLifecycle()
+
+    LifecycleStartEffect(route) {
+        viewModel.loadServices()
+
+        onStopOrDispose { }
+    }
 
     RouteLayout(
         route = route!!,
+        services = services,
         onNavigationIconPressed = onNavigationIconPressed,
+        onReverseRoutePressed = viewModel::reverseRoute,
+        onReloadServices = viewModel::loadServices,
     )
 }

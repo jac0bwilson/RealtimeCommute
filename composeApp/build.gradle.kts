@@ -1,8 +1,11 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.buildKonfig)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
@@ -48,6 +51,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.ktor.client.auth)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization)
@@ -90,6 +94,22 @@ android {
 
 room {
     schemaDirectory("$projectDir/schemas")
+}
+
+buildkonfig {
+    packageName = "uk.jacobw.commute"
+
+    defaultConfigs {
+        val rttApiUser: String = gradleLocalProperties(rootDir, providers).getProperty("RTT_API_USER")
+        val rttApiKey: String = gradleLocalProperties(rootDir, providers).getProperty("RTT_API_KEY")
+
+        require(rttApiUser.isNotEmpty() && rttApiKey.isNotEmpty()) {
+            "Register an API user & key in local.properties"
+        }
+
+        buildConfigField(STRING, "RTT_API_USER", rttApiUser)
+        buildConfigField(STRING, "RTT_API_KEY", rttApiKey)
+    }
 }
 
 dependencies {
