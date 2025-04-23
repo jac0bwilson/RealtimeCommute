@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -141,6 +142,15 @@ private fun ServiceList(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
+        if (services.isEmpty()) {
+            Text(
+                "Unable to find any trains in the next 2 hours",
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(8.dp),
+            )
+        }
+
         services.forEach {
             OutlinedCard(
                 modifier = Modifier
