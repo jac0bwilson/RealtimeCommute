@@ -20,11 +20,8 @@ import uk.jacobw.commute.data.network.realtimetrains.RealtimeTrainsApi
 import uk.jacobw.commute.data.network.station.StationApi
 import uk.jacobw.commute.feature.home.HomeViewModel
 import uk.jacobw.commute.feature.route.RouteViewModel
-import uk.jacobw.commute.getPlatform
 
 val appModule = module {
-    single { getPlatform() }
-
     single { get<RouteDatabase>().getDao() }
     single { RouteRepository(get()) }
 

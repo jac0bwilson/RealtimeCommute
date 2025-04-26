@@ -9,7 +9,6 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
-    onNavigateToSample: () -> Unit,
     onNavigateToRoute: () -> Unit,
 ) {
     LifecycleStartEffect(Unit) {
@@ -24,7 +23,6 @@ fun HomeScreen(
     HomeLayout(
         stationOptions = stations,
         routes = routes,
-        onNavigateToSample = onNavigateToSample,
         addRoute = viewModel::addRoute,
         deleteAllRoutes = viewModel::deleteAllRoutes,
         onNavigateToRoute = { route ->

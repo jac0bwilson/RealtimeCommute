@@ -55,7 +55,6 @@ import uk.jacobw.commute.data.model.Station
 fun HomeLayout(
     stationOptions: List<Station>,
     routes: List<RouteWithStations>,
-    onNavigateToSample: () -> Unit,
     addRoute: (String, String) -> Boolean,
     deleteAllRoutes: () -> Unit,
     onNavigateToRoute: (RouteWithStations) -> Unit,
@@ -65,15 +64,6 @@ fun HomeLayout(
             TopAppBar(
                 title = { Text("Realtime Commute") },
                 actions = {
-                    IconButton(
-                        onClick = onNavigateToSample
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Info,
-                            contentDescription = "Sample code"
-                        )
-                    }
-
                     IconButton(
                         onClick = deleteAllRoutes
                     ) {
