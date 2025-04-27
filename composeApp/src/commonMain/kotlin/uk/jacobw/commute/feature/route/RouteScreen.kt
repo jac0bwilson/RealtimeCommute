@@ -25,6 +25,5 @@ fun RouteScreen(
         services = services,
         onNavigationIconPressed = onNavigationIconPressed,
         onReverseRoutePressed = viewModel::reverseRoute,
-        onReloadServices = viewModel::loadServices,
     )
 }

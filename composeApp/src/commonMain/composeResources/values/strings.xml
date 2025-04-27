@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dash_formatted">%1$s - %2$s</string>
+    <string name="navigate_back_desc">Navigate back</string>
+
+    <string name="home_title">Realtime Commute</string>
+    <string name="home_delete_desc">Delete routes</string>
+    <string name="home_input_title">Where are you going today?</string>
+    <string name="home_input_origin_label">From</string>
+    <string name="home_input_destination_label">To</string>
+    <string name="home_input_submit_button">Track it</string>
+
+    <string name="route_reverse_desc">Reverse route</string>
+    <string name="route_no_trains">Unable to find any trains in the next 2 hours</string>
+    <string name="route_platform_changed">Now departing from platform %1$s</string>
+    <string name="route_platform_confirmed">Departing from platform %1$s</string>
+    <string name="route_platform_estimated">Expected to depart from platform %1$s</string>
+</resources>

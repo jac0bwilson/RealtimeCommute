@@ -22,7 +22,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -45,7 +44,15 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import realtimecommute.composeapp.generated.resources.Res
+import realtimecommute.composeapp.generated.resources.dash_formatted
+import realtimecommute.composeapp.generated.resources.home_delete_desc
+import realtimecommute.composeapp.generated.resources.home_input_destination_label
+import realtimecommute.composeapp.generated.resources.home_input_origin_label
+import realtimecommute.composeapp.generated.resources.home_input_submit_button
+import realtimecommute.composeapp.generated.resources.home_input_title
+import realtimecommute.composeapp.generated.resources.home_title
 import realtimecommute.composeapp.generated.resources.train_icon
 import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Station
@@ -62,14 +69,14 @@ fun HomeLayout(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Realtime Commute") },
+                title = { Text(stringResource(Res.string.home_title)) },
                 actions = {
                     IconButton(
                         onClick = deleteAllRoutes
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
-                            contentDescription = "Delete routes"
+                            contentDescription = stringResource(Res.string.home_delete_desc)
                         )
                     }
                 }
@@ -117,7 +124,7 @@ private fun SavedRoutes(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        it.originStation.name,
+                        text = it.originStation.name,
                         modifier = Modifier
                             .align(Alignment.CenterStart)
                             .fillMaxWidth(0.4f),
@@ -128,7 +135,7 @@ private fun SavedRoutes(
                         contentDescription = null
                     )
                     Text(
-                        it.destinationStation.name,
+                        text = it.destinationStation.name,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
                             .fillMaxWidth(0.4f),
@@ -169,7 +176,7 @@ private fun JourneyInput(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Where are you going today?",
+                text = stringResource(Res.string.home_input_title),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.fillMaxWidth()
@@ -179,7 +186,7 @@ private fun JourneyInput(
                 stationOptions = stationOptions,
                 currentValue = origin.value,
                 setValue = { origin.value = it },
-                label = "From",
+                label = stringResource(Res.string.home_input_origin_label),
                 keyboardImeAction = ImeAction.Next,
             )
 
@@ -187,7 +194,7 @@ private fun JourneyInput(
                 stationOptions = stationOptions,
                 currentValue = destination.value,
                 setValue = { destination.value = it },
-                label = "To",
+                label = stringResource(Res.string.home_input_destination_label),
                 keyboardImeAction = ImeAction.Done,
                 keyboardActions = KeyboardActions(
                     onDone = {
@@ -206,7 +213,7 @@ private fun JourneyInput(
                     painter = painterResource(Res.drawable.train_icon),
                     contentDescription = null
                 )
-                Text("Track it")
+                Text(stringResource(Res.string.home_input_submit_button))
             }
         }
     }
@@ -266,7 +273,7 @@ private fun StationInput(
                 LazyColumn {
                     items(filteredOptions) { item ->
                         DropdownMenuItem(
-                            text = { Text("${item.crsCode} - ${item.stationName}") },
+                            text = { Text(stringResource(Res.string.dash_formatted, item.crsCode, item.stationName)) },
                             onClick = {
                                 setValue(item.stationName)
                                 expanded = false

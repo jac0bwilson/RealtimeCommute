@@ -28,11 +28,20 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.substring
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import realtimecommute.composeapp.generated.resources.Res
 import realtimecommute.composeapp.generated.resources.compare_arrows_icon
+import realtimecommute.composeapp.generated.resources.dash_formatted
+import realtimecommute.composeapp.generated.resources.navigate_back_desc
+import realtimecommute.composeapp.generated.resources.route_no_trains
+import realtimecommute.composeapp.generated.resources.route_platform_changed
+import realtimecommute.composeapp.generated.resources.route_platform_confirmed
+import realtimecommute.composeapp.generated.resources.route_platform_estimated
+import realtimecommute.composeapp.generated.resources.route_reverse_desc
 import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Service
 
@@ -43,19 +52,18 @@ fun RouteLayout(
     services: List<Service>,
     onNavigationIconPressed: () -> Unit,
     onReverseRoutePressed: () -> Unit,
-    onReloadServices: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("${route.originStation.crsCode} - ${route.destinationStation.crsCode}") },
+                title = { Text(stringResource(Res.string.dash_formatted, route.originStation.crsCode, route.destinationStation.crsCode)) },
                 navigationIcon = {
                     IconButton(
                         onClick = onNavigationIconPressed
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Navigate back"
+                            contentDescription = stringResource(Res.string.navigate_back_desc)
                         )
                     }
                 },
@@ -65,7 +73,7 @@ fun RouteLayout(
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.compare_arrows_icon),
-                            contentDescription = "Reverse route"
+                            contentDescription = stringResource(Res.string.route_reverse_desc)
                         )
                     }
                 }
@@ -104,12 +112,10 @@ private fun RouteCard(
                     .fillMaxWidth(0.4f),
             ) {
                 Text(
-                    route.originStation.crsCode,
+                    text = route.originStation.crsCode,
                     style = MaterialTheme.typography.titleLarge
                 )
-                Text(
-                    route.originStation.name
-                )
+                Text(route.originStation.name)
             }
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
@@ -121,12 +127,10 @@ private fun RouteCard(
                     .fillMaxWidth(0.4f),
             ) {
                 Text(
-                    route.destinationStation.crsCode,
+                    text = route.destinationStation.crsCode,
                     style = MaterialTheme.typography.titleLarge
                 )
-                Text(
-                    route.destinationStation.name
-                )
+                Text(route.destinationStation.name)
             }
         }
     }
@@ -144,7 +148,7 @@ private fun ServiceList(
     ) {
         if (services.isEmpty()) {
             Text(
-                "Unable to find any trains in the next 2 hours",
+                text = stringResource(Res.string.route_no_trains),
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(8.dp),
@@ -162,22 +166,25 @@ private fun ServiceList(
                 ) {
                     if (it.detail.plannedDeparture == it.detail.realtimeDeparture) {
                         Text(
-                            it.detail.plannedDeparture,
+                            text = it.detail.plannedDeparture.timestamp(),
                             style = MaterialTheme.typography.titleLarge
                         )
                     } else {
                         Text(
-                            correctionString(it.detail.plannedDeparture, it.detail.realtimeDeparture),
+                            text = correctionString(it.detail.plannedDeparture, it.detail.realtimeDeparture),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
-                    if (it.detail.platformChanged) {
-                        Text("Now departing from platform ${it.detail.platform}")
-                    } else if (it.detail.platformConfirmed) {
-                        Text("Departing from platform ${it.detail.platform}")
-                    } else {
-                        Text("Expected to depart from platform ${it.detail.platform}")
-                    }
+                    Text(
+                        stringResource(
+                            when {
+                                it.detail.platformChanged -> Res.string.route_platform_changed
+                                it.detail.platformConfirmed -> Res.string.route_platform_confirmed
+                                else -> Res.string.route_platform_estimated
+                            },
+                            it.detail.platform
+                        )
+                    )
                     Text(it.operator)
                 }
             }
@@ -188,8 +195,16 @@ private fun ServiceList(
 private fun correctionString(intended: String, actual: String): AnnotatedString {
     return buildAnnotatedString {
         withStyle(SpanStyle(color = Color.Red, textDecoration = TextDecoration.LineThrough)) {
-            append(intended)
+            append(intended.timestamp())
         }
-        append(" $actual")
+        append(" ${actual.timestamp()}")
     }
+}
+
+private fun String.timestamp(): String {
+    if (this.all { char -> char.isDigit() } && this.length == 4) {
+        return this.substring(0, 2) + ":" + this.substring(2)
+    }
+
+    return this
 }
