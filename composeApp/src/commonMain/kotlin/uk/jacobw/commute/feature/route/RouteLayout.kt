@@ -3,6 +3,7 @@ package uk.jacobw.commute.feature.route
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +29,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.substring
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
@@ -170,17 +170,27 @@ private fun ServiceList(
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                 ) {
-                    if (it.detail.plannedDeparture == it.detail.realtimeDeparture) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        if (it.detail.plannedDeparture == it.detail.realtimeDeparture) {
+                            Text(
+                                text = it.detail.plannedDeparture.timestamp(),
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        } else {
+                            Text(
+                                text = correctionString(it.detail.plannedDeparture, it.detail.realtimeDeparture),
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        }
+
                         Text(
-                            text = it.detail.plannedDeparture.timestamp(),
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    } else {
-                        Text(
-                            text = correctionString(it.detail.plannedDeparture, it.detail.realtimeDeparture),
+                            text = it.detail.destinations.joinToString("/") { it.description },
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
+
                     Text(
                         stringResource(
                             when {

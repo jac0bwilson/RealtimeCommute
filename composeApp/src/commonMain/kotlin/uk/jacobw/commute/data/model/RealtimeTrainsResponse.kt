@@ -18,9 +18,15 @@ data class Service(
 
 @Serializable
 data class Detail(
+    @SerialName("destination") val destinations: List<Destination>,
     @SerialName("gbttBookedDeparture") val plannedDeparture: String,
     val realtimeDeparture: String,
     val platform: String,
     val platformConfirmed: Boolean,
     val platformChanged: Boolean,
+)
+
+@Serializable
+data class Destination(
+    val description: String,
 )
