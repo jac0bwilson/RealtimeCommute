@@ -21,40 +21,41 @@ import uk.jacobw.commute.data.network.station.StationApi
 import uk.jacobw.commute.feature.home.HomeViewModel
 import uk.jacobw.commute.feature.route.RouteViewModel
 
-val appModule = module {
-    single { get<RouteDatabase>().getDao() }
-    single { RouteRepository(get()) }
+val appModule =
+    module {
+        single { get<RouteDatabase>().getDao() }
+        single { RouteRepository(get()) }
 
-    single(named("stations")) {
-        HttpClient {
-            install(ContentNegotiation) {
-                json(json = Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
+        single(named("stations")) {
+            HttpClient {
+                install(ContentNegotiation) {
+                    json(json = Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
+                }
             }
         }
-    }
-    single { StationApi(get(named("stations"))) }
-    single { StationRepository(get()) }
+        single { StationApi(get(named("stations"))) }
+        single { StationRepository(get()) }
 
-    single(named("realtime")) {
-        HttpClient {
-            install(ContentNegotiation) {
-                json(json = Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
-            }
-            install(Auth) {
-                basic {
-                    credentials {
-                        BasicAuthCredentials(username = BuildKonfig.RTT_API_USER, password = BuildKonfig.RTT_API_KEY)
-                    }
-                    sendWithoutRequest { _ ->
-                        true
+        single(named("realtime")) {
+            HttpClient {
+                install(ContentNegotiation) {
+                    json(json = Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
+                }
+                install(Auth) {
+                    basic {
+                        credentials {
+                            BasicAuthCredentials(username = BuildKonfig.RTT_API_USER, password = BuildKonfig.RTT_API_KEY)
+                        }
+                        sendWithoutRequest { _ ->
+                            true
+                        }
                     }
                 }
             }
         }
-    }
-    single { RealtimeTrainsApi(get(named("realtime"))) }
-    single { RealtimeTrainsRepository(get()) }
+        single { RealtimeTrainsApi(get(named("realtime"))) }
+        single { RealtimeTrainsRepository(get()) }
 
-    viewModel { HomeViewModel(get(), get()) }
-    viewModel { RouteViewModel(get(), get()) }
-}
+        viewModel { HomeViewModel(get(), get()) }
+        viewModel { RouteViewModel(get(), get()) }
+    }

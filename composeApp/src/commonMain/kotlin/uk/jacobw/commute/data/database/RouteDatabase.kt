@@ -19,10 +19,9 @@ expect object RouteDatabaseConstructor : RoomDatabaseConstructor<RouteDatabase> 
     override fun initialize(): RouteDatabase
 }
 
-fun getRouteDatabase(builder: RoomDatabase.Builder<RouteDatabase>): RouteDatabase {
-    return builder
+fun getRouteDatabase(builder: RoomDatabase.Builder<RouteDatabase>): RouteDatabase =
+    builder
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
         .fallbackToDestructiveMigration(true)
         .build()
-}

@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Response(
-    val services: List<Service>
+    val services: List<Service>,
 )
 
 @Serializable

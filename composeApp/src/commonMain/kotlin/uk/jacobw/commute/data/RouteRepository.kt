@@ -6,18 +6,21 @@ import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Station
 
 class RouteRepository(
-    private val routeDao: RouteDao
+    private val routeDao: RouteDao,
 ) {
     var selectedRoute: RouteWithStations? = null
 
-    suspend fun insertRoute(origin: Station, destination: Station) {
+    suspend fun insertRoute(
+        origin: Station,
+        destination: Station,
+    ) {
         routeDao.insertStation(origin.toStationEntity())
         routeDao.insertStation(destination.toStationEntity())
         routeDao.insertRoute(
             RouteEntity(
                 originCrsCode = origin.crsCode,
                 destinationCrsCode = destination.crsCode,
-            )
+            ),
         )
     }
 

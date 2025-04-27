@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.room)
     alias(libs.plugins.serialization)
 }
@@ -19,20 +20,20 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
         }
     }
-    
+
     sourceSets {
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -67,12 +68,21 @@ kotlin {
 
 android {
     namespace = "uk.jacobw.commute"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "uk.jacobw.commute"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.android.targetSdk
+                .get()
+                .toInt()
         versionCode = 1
         versionName = "1.0"
     }
@@ -112,8 +122,21 @@ buildkonfig {
     }
 }
 
+ktlint {
+    version.set("1.5.0")
+    verbose.set(true)
+    outputToConsole.set(true)
+    coloredOutput.set(true)
+
+    filter {
+        exclude { element -> element.file.path.contains("resourceGenerator") }
+        exclude { element -> element.file.path.contains("/generated/") }
+        exclude { element -> element.file.path.contains("buildkonfig") }
+    }
+}
+
 dependencies {
     debugImplementation(compose.uiTooling)
     ksp(libs.room.compiler)
+    ktlintRuleset(libs.ktlint.ruleset.compose)
 }
-

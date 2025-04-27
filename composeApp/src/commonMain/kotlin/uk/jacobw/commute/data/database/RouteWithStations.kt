@@ -5,16 +5,14 @@ import androidx.room.Relation
 
 data class RouteWithStations(
     @Embedded val route: RouteEntity,
-
     @Relation(
         parentColumn = "originCrsCode",
-        entityColumn = "crsCode"
+        entityColumn = "crsCode",
     )
     val originStation: StationEntity,
-
     @Relation(
         parentColumn = "destinationCrsCode",
-        entityColumn = "crsCode"
+        entityColumn = "crsCode",
     )
-    val destinationStation: StationEntity
+    val destinationStation: StationEntity,
 )

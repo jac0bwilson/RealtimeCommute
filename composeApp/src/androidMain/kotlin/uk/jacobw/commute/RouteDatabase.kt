@@ -11,6 +11,6 @@ fun getDatabaseBuilder(context: Context): RoomDatabase.Builder<RouteDatabase> {
 
     return Room.databaseBuilder(
         context = appContext,
-        name = dbFile.absolutePath
+        name = dbFile.absolutePath,
     )
 }

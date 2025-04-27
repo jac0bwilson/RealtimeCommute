@@ -29,12 +29,13 @@ class RouteViewModel(
         _route.update { current ->
             current?.let {
                 RouteWithStations(
-                    route = RouteEntity(
-                        originCrsCode = current.route.destinationCrsCode,
-                        destinationCrsCode = current.route.originCrsCode
-                    ),
+                    route =
+                        RouteEntity(
+                            originCrsCode = current.route.destinationCrsCode,
+                            destinationCrsCode = current.route.originCrsCode,
+                        ),
                     originStation = current.destinationStation,
-                    destinationStation = current.originStation
+                    destinationStation = current.originStation,
                 )
             }
         }
@@ -43,7 +44,8 @@ class RouteViewModel(
     fun loadServices() {
         _route.value?.let { route ->
             viewModelScope.launch {
-                realtimeTrainsRepository.getNextServices(route.originStation.crsCode, route.destinationStation.crsCode)
+                realtimeTrainsRepository
+                    .getNextServices(route.originStation.crsCode, route.destinationStation.crsCode)
                     .onSuccess { _services.value = it }
 
                 _isLoading.value = false

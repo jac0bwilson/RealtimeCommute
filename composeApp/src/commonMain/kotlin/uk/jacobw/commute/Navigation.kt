@@ -6,18 +6,16 @@ import androidx.navigation.compose.composable
 import uk.jacobw.commute.feature.home.HomeScreen
 import uk.jacobw.commute.feature.route.RouteScreen
 
-fun NavGraphBuilder.featureGraph(
-    navController: NavController,
-) {
+fun NavGraphBuilder.featureGraph(navController: NavController) {
     composable(route = Routes.HOME.name) {
         HomeScreen(
-            onNavigateToRoute = { navController.navigate(Routes.ROUTE.name) }
+            onNavigateToRoute = { navController.navigate(Routes.ROUTE.name) },
         )
     }
 
     composable(route = Routes.ROUTE.name) {
         RouteScreen(
-            onNavigationIconPressed = { navController.popBackStack() }
+            onClickNavigationIcon = { navController.popBackStack() },
         )
     }
 }

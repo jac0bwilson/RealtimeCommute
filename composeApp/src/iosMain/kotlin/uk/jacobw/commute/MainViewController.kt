@@ -2,6 +2,8 @@ package uk.jacobw.commute
 
 import androidx.compose.ui.window.ComposeUIViewController
 
-fun MainViewController() = ComposeUIViewController(configure = {}) {
-    App()
-}
+@Suppress("ktlint:standard:function-naming")
+fun MainViewController() =
+    ComposeUIViewController(configure = {}) {
+        App()
+    }

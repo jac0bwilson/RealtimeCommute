@@ -8,12 +8,12 @@ class StationRepository(
 ) {
     private var stations: List<Station> = emptyList()
 
-    suspend fun getStations(): Result<List<Station>> {
-        return if (stations.isEmpty()) {
-            stationApi.getStationList()
+    suspend fun getStations(): Result<List<Station>> =
+        if (stations.isEmpty()) {
+            stationApi
+                .getStationList()
                 .onSuccess { stations = it }
         } else {
             Result.success(stations)
         }
-    }
 }

@@ -52,8 +52,8 @@ fun RouteLayout(
     route: RouteWithStations,
     services: List<Service>,
     isLoadingServices: Boolean,
-    onNavigationIconPressed: () -> Unit,
-    onReverseRoutePressed: () -> Unit,
+    onClickNavigationIcon: () -> Unit,
+    onClickReverseRoute: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -61,31 +61,32 @@ fun RouteLayout(
                 title = { Text(stringResource(Res.string.dash_formatted, route.originStation.crsCode, route.destinationStation.crsCode)) },
                 navigationIcon = {
                     IconButton(
-                        onClick = onNavigationIconPressed
+                        onClick = onClickNavigationIcon,
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(Res.string.navigate_back_desc)
+                            contentDescription = stringResource(Res.string.navigate_back_desc),
                         )
                     }
                 },
                 actions = {
                     IconButton(
-                        onClick = onReverseRoutePressed
+                        onClick = onClickReverseRoute,
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.compare_arrows_icon),
-                            contentDescription = stringResource(Res.string.route_reverse_desc)
+                            contentDescription = stringResource(Res.string.route_reverse_desc),
                         )
                     }
-                }
+                },
             )
-        }
+        },
     ) { internalPadding ->
         Column(
-            modifier = Modifier
-                .padding(internalPadding)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(internalPadding)
+                    .fillMaxWidth(),
         ) {
             RouteCard(route)
 
@@ -99,42 +100,44 @@ fun RouteLayout(
 }
 
 @Composable
-private fun RouteCard(
-    route: RouteWithStations,
-) {
+private fun RouteCard(route: RouteWithStations) {
     ElevatedCard(
-        modifier = Modifier
-            .padding(8.dp)
+        modifier =
+            Modifier
+                .padding(8.dp),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            contentAlignment = Alignment.Center,
         ) {
             Column(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .fillMaxWidth(0.4f),
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterStart)
+                        .fillMaxWidth(0.4f),
             ) {
                 Text(
                     text = route.originStation.crsCode,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 Text(route.originStation.name)
             }
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                contentDescription = null
+                contentDescription = null,
             )
             Column(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .fillMaxWidth(0.4f),
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterEnd)
+                        .fillMaxWidth(0.4f),
             ) {
                 Text(
                     text = route.destinationStation.crsCode,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 Text(route.destinationStation.name)
             }
@@ -143,13 +146,12 @@ private fun RouteCard(
 }
 
 @Composable
-private fun ServiceList(
-    services: List<Service>,
-) {
+private fun ServiceList(services: List<Service>) {
     Column(
-        modifier = Modifier
-            .padding(8.dp)
-            .verticalScroll(rememberScrollState()),
+        modifier =
+            Modifier
+                .padding(8.dp)
+                .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         if (services.isEmpty()) {
@@ -163,12 +165,14 @@ private fun ServiceList(
 
         services.forEach {
             OutlinedCard(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
             ) {
                 Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -176,18 +180,18 @@ private fun ServiceList(
                         if (it.detail.plannedDeparture == it.detail.realtimeDeparture) {
                             Text(
                                 text = it.detail.plannedDeparture.timestamp(),
-                                style = MaterialTheme.typography.titleLarge
+                                style = MaterialTheme.typography.titleLarge,
                             )
                         } else {
                             Text(
                                 text = correctionString(it.detail.plannedDeparture, it.detail.realtimeDeparture),
-                                style = MaterialTheme.typography.titleLarge
+                                style = MaterialTheme.typography.titleLarge,
                             )
                         }
 
                         Text(
                             text = it.detail.destinations.joinToString("/") { it.description },
-                            style = MaterialTheme.typography.titleLarge
+                            style = MaterialTheme.typography.titleLarge,
                         )
                     }
 
@@ -198,8 +202,8 @@ private fun ServiceList(
                                 it.detail.platformConfirmed -> Res.string.route_platform_confirmed
                                 else -> Res.string.route_platform_estimated
                             },
-                            it.detail.platform
-                        )
+                            it.detail.platform,
+                        ),
                     )
                     Text(it.operator)
                 }
@@ -208,14 +212,16 @@ private fun ServiceList(
     }
 }
 
-private fun correctionString(intended: String, actual: String): AnnotatedString {
-    return buildAnnotatedString {
+private fun correctionString(
+    intended: String,
+    actual: String,
+): AnnotatedString =
+    buildAnnotatedString {
         withStyle(SpanStyle(color = Color.Red, textDecoration = TextDecoration.LineThrough)) {
             append(intended.timestamp())
         }
         append(" ${actual.timestamp()}")
     }
-}
 
 private fun String.timestamp(): String {
     if (this.all { char -> char.isDigit() } && this.length == 4) {

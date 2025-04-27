@@ -10,15 +10,15 @@ import androidx.room.PrimaryKey
             entity = StationEntity::class,
             parentColumns = ["crsCode"],
             childColumns = ["originCrsCode"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.CASCADE,
         ),
         ForeignKey(
             entity = StationEntity::class,
             parentColumns = ["crsCode"],
             childColumns = ["destinationCrsCode"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class RouteEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,

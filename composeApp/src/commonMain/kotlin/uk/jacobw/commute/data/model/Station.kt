@@ -8,10 +8,9 @@ data class Station(
     val stationName: String,
     val crsCode: String,
 ) {
-    fun toStationEntity(): StationEntity {
-        return StationEntity(
+    fun toStationEntity(): StationEntity =
+        StationEntity(
             crsCode = crsCode,
             name = stationName,
         )
-    }
 }

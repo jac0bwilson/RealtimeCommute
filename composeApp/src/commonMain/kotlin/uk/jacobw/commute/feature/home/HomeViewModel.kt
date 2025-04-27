@@ -18,29 +18,33 @@ class HomeViewModel(
     private val stationRepository: StationRepository,
 ) : ViewModel() {
     val routes: StateFlow<List<RouteWithStations>> =
-        routeRepository.getAllRoutes()
+        routeRepository
+            .getAllRoutes()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
-                initialValue = emptyList()
+                initialValue = emptyList(),
             )
     private val _stations = MutableStateFlow<List<Station>>(emptyList())
     val stations = _stations.asStateFlow()
 
     fun loadStations() {
         viewModelScope.launch {
-            stationRepository.getStations()
+            stationRepository
+                .getStations()
                 .onSuccess { _stations.value = it }
         }
     }
 
-    private fun findStationByString(value: String): Station? {
-        return stations.value.find {
+    private fun findStationByString(value: String): Station? =
+        stations.value.find {
             it.crsCode.lowercase() == value.lowercase() || it.stationName.lowercase() == value.lowercase()
         }
-    }
 
-    fun addRoute(origin: String, destination: String): Boolean {
+    fun addRoute(
+        origin: String,
+        destination: String,
+    ): Boolean {
         val originStation = findStationByString(origin)
         val destinationStation = findStationByString(destination)
 

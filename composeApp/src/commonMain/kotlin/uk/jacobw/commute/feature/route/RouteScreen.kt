@@ -9,7 +9,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun RouteScreen(
     viewModel: RouteViewModel = koinViewModel(),
-    onNavigationIconPressed: () -> Unit,
+    onClickNavigationIcon: () -> Unit,
 ) {
     val route by viewModel.route.collectAsStateWithLifecycle()
     val services by viewModel.services.collectAsStateWithLifecycle()
@@ -25,7 +25,7 @@ fun RouteScreen(
         route = route!!,
         services = services,
         isLoadingServices = isLoadingServices,
-        onNavigationIconPressed = onNavigationIconPressed,
-        onReverseRoutePressed = viewModel::reverseRoute,
+        onClickNavigationIcon = onClickNavigationIcon,
+        onClickReverseRoute = viewModel::reverseRoute,
     )
 }

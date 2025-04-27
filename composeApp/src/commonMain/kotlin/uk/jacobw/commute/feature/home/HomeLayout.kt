@@ -13,12 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Delete
@@ -28,9 +22,15 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,21 +72,22 @@ fun HomeLayout(
                 title = { Text(stringResource(Res.string.home_title)) },
                 actions = {
                     IconButton(
-                        onClick = deleteAllRoutes
+                        onClick = deleteAllRoutes,
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
-                            contentDescription = stringResource(Res.string.home_delete_desc)
+                            contentDescription = stringResource(Res.string.home_delete_desc),
                         )
                     }
-                }
+                },
             )
         },
     ) { internalPadding ->
         Column(
-            modifier = Modifier
-                .padding(internalPadding)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(internalPadding)
+                    .fillMaxWidth(),
         ) {
             JourneyInput(
                 stationOptions = stationOptions,
@@ -104,42 +105,46 @@ fun HomeLayout(
 @Composable
 private fun SavedRoutes(
     routes: List<RouteWithStations>,
-    onNavigateToRoute: (RouteWithStations) -> Unit
+    onNavigateToRoute: (RouteWithStations) -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .padding(8.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        modifier =
+            Modifier
+                .padding(8.dp)
+                .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         routes.forEach {
             OutlinedCard(
                 onClick = { onNavigateToRoute(it) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 16.dp),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 16.dp),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = it.originStation.name,
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .fillMaxWidth(0.4f),
-                        style = MaterialTheme.typography.titleMedium
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterStart)
+                                .fillMaxWidth(0.4f),
+                        style = MaterialTheme.typography.titleMedium,
                     )
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                     Text(
                         text = it.destinationStation.name,
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .fillMaxWidth(0.4f),
-                        style = MaterialTheme.typography.titleMedium
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterEnd)
+                                .fillMaxWidth(0.4f),
+                        style = MaterialTheme.typography.titleMedium,
                     )
                 }
             }
@@ -165,21 +170,23 @@ private fun JourneyInput(
     }
 
     ElevatedCard(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
+        modifier =
+            Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Column(
+            modifier =
+                Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
                 text = stringResource(Res.string.home_input_title),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
 
             StationInput(
@@ -196,22 +203,23 @@ private fun JourneyInput(
                 setValue = { destination.value = it },
                 label = stringResource(Res.string.home_input_destination_label),
                 keyboardImeAction = ImeAction.Done,
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        keyboardController?.hide()
-                        submit()
-                    }
-                )
+                keyboardActions =
+                    KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                            submit()
+                        },
+                    ),
             )
 
             Button(
                 onClick = ::submit,
                 modifier = Modifier.fillMaxWidth(),
-                enabled = origin.value.isNotBlank() && destination.value.isNotBlank()
+                enabled = origin.value.isNotBlank() && destination.value.isNotBlank(),
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.train_icon),
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Text(stringResource(Res.string.home_input_submit_button))
             }
@@ -227,48 +235,52 @@ private fun StationInput(
     setValue: (String) -> Unit,
     label: String,
     keyboardImeAction: ImeAction,
-    keyboardActions: KeyboardActions = KeyboardActions()
+    keyboardActions: KeyboardActions = KeyboardActions(),
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val filteredOptions = stationOptions.filter {
-        val currentLower = currentValue.lowercase()
-        it.stationName.lowercase().contains(currentLower) || it.crsCode.lowercase().contains(currentLower)
-    }
+    val filteredOptions =
+        stationOptions.filter {
+            val currentLower = currentValue.lowercase()
+            it.stationName.lowercase().contains(currentLower) || it.crsCode.lowercase().contains(currentLower)
+        }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(MenuAnchorType.PrimaryEditable),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(MenuAnchorType.PrimaryEditable),
             value = currentValue,
             onValueChange = setValue,
             label = { Text(label) },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Words,
-                imeAction = keyboardImeAction
-            ),
+            keyboardOptions =
+                KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    imeAction = keyboardImeAction,
+                ),
             keyboardActions = keyboardActions,
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
                     expanded = expanded,
-                    modifier = Modifier.menuAnchor(MenuAnchorType.SecondaryEditable)
+                    modifier = Modifier.menuAnchor(MenuAnchorType.SecondaryEditable),
                 )
-            }
+            },
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
         ) {
             Box(
-                modifier = Modifier
-                    .height(250.dp)
-                    .width(300.dp)
+                modifier =
+                    Modifier
+                        .height(250.dp)
+                        .width(300.dp),
             ) {
                 LazyColumn {
                     items(filteredOptions) { item ->
@@ -277,7 +289,7 @@ private fun StationInput(
                             onClick = {
                                 setValue(item.stationName)
                                 expanded = false
-                            }
+                            },
                         )
                     }
                 }

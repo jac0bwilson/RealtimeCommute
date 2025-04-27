@@ -12,19 +12,20 @@ fun getDatabaseBuilder(): RoomDatabase.Builder<RouteDatabase> {
     val dbFile = documentDirectory() + "/routes.db"
 
     return Room.databaseBuilder(
-        name = dbFile
+        name = dbFile,
     )
 }
 
 @OptIn(ExperimentalForeignApi::class)
 private fun documentDirectory(): String {
-    val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
-        directory = NSDocumentDirectory,
-        inDomain = NSUserDomainMask,
-        appropriateForURL = null,
-        create = false,
-        error = null,
-    )
+    val documentDirectory =
+        NSFileManager.defaultManager.URLForDirectory(
+            directory = NSDocumentDirectory,
+            inDomain = NSUserDomainMask,
+            appropriateForURL = null,
+            create = false,
+            error = null,
+        )
 
     return requireNotNull(documentDirectory?.path)
 }

@@ -28,6 +28,6 @@ fun HomeScreen(
         onNavigateToRoute = { route ->
             viewModel.setSelectedRoute(route)
             onNavigateToRoute()
-        }
+        },
     )
 }
