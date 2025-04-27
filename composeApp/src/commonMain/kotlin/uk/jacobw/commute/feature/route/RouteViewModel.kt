@@ -42,6 +42,7 @@ class RouteViewModel(
     }
 
     fun loadServices() {
+        _isLoading.value = true
         _route.value?.let { route ->
             viewModelScope.launch {
                 realtimeTrainsRepository
