@@ -44,12 +44,14 @@ import realtimecommute.composeapp.generated.resources.route_platform_estimated
 import realtimecommute.composeapp.generated.resources.route_reverse_desc
 import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Service
+import uk.jacobw.commute.feature.LoadingSpinner
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RouteLayout(
     route: RouteWithStations,
     services: List<Service>,
+    isLoadingServices: Boolean,
     onNavigationIconPressed: () -> Unit,
     onReverseRoutePressed: () -> Unit,
 ) {
@@ -87,7 +89,11 @@ fun RouteLayout(
         ) {
             RouteCard(route)
 
-            ServiceList(services)
+            if (isLoadingServices) {
+                LoadingSpinner()
+            } else {
+                ServiceList(services)
+            }
         }
     }
 }

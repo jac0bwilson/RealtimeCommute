@@ -22,6 +22,9 @@ class RouteViewModel(
     private val _services = MutableStateFlow<List<Service>>(emptyList())
     val services = _services.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
+
     fun reverseRoute() {
         _route.update { current ->
             current?.let {
@@ -42,6 +45,8 @@ class RouteViewModel(
             viewModelScope.launch {
                 realtimeTrainsRepository.getNextServices(route.originStation.crsCode, route.destinationStation.crsCode)
                     .onSuccess { _services.value = it }
+
+                _isLoading.value = false
             }
         }
     }

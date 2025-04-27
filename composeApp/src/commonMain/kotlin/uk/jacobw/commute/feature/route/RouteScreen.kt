@@ -13,6 +13,7 @@ fun RouteScreen(
 ) {
     val route by viewModel.route.collectAsStateWithLifecycle()
     val services by viewModel.services.collectAsStateWithLifecycle()
+    val isLoadingServices by viewModel.isLoading.collectAsStateWithLifecycle()
 
     LifecycleStartEffect(route) {
         viewModel.loadServices()
@@ -23,6 +24,7 @@ fun RouteScreen(
     RouteLayout(
         route = route!!,
         services = services,
+        isLoadingServices = isLoadingServices,
         onNavigationIconPressed = onNavigationIconPressed,
         onReverseRoutePressed = viewModel::reverseRoute,
     )
