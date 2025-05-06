@@ -56,6 +56,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization)
+            implementation(libs.material.icons)
             implementation(libs.room.runtime)
             implementation(libs.serialization.json)
             implementation(libs.sqlite)
