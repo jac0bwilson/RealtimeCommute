@@ -8,15 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,15 +22,14 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import realtimecommute.composeapp.generated.resources.Res
 import realtimecommute.composeapp.generated.resources.dash_formatted
-import realtimecommute.composeapp.generated.resources.navigate_back_desc
 import uk.jacobw.commute.data.model.Location
 import uk.jacobw.commute.data.model.Route
-import uk.jacobw.commute.feature.LoadingSpinner
-import uk.jacobw.commute.feature.PlatformText
-import uk.jacobw.commute.feature.correctionString
-import uk.jacobw.commute.feature.timestamp
+import uk.jacobw.commute.feature.shared.AppBar
+import uk.jacobw.commute.feature.shared.LoadingSpinner
+import uk.jacobw.commute.feature.shared.PlatformText
+import uk.jacobw.commute.feature.shared.correctionString
+import uk.jacobw.commute.feature.shared.timestamp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceLayout(
     route: Route,
@@ -48,26 +41,14 @@ fun ServiceLayout(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        stringResource(
-                            Res.string.dash_formatted,
-                            route.origin.crsCode,
-                            route.destination.crsCode,
-                        ),
-                    )
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = onClickNavigationIcon,
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(Res.string.navigate_back_desc),
-                        )
-                    }
-                },
+            AppBar(
+                title =
+                    stringResource(
+                        Res.string.dash_formatted,
+                        route.origin.crsCode,
+                        route.destination.crsCode,
+                    ),
+                onClickNavigationIcon = onClickNavigationIcon,
             )
         },
     ) { internalPadding ->

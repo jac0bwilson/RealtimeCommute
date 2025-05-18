@@ -9,17 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,17 +27,17 @@ import org.jetbrains.compose.resources.stringResource
 import realtimecommute.composeapp.generated.resources.Res
 import realtimecommute.composeapp.generated.resources.compare_arrows_icon
 import realtimecommute.composeapp.generated.resources.dash_formatted
-import realtimecommute.composeapp.generated.resources.navigate_back_desc
 import realtimecommute.composeapp.generated.resources.route_no_trains
 import realtimecommute.composeapp.generated.resources.route_reverse_desc
 import uk.jacobw.commute.data.model.Route
 import uk.jacobw.commute.data.model.Service
-import uk.jacobw.commute.feature.LoadingSpinner
-import uk.jacobw.commute.feature.PlatformText
-import uk.jacobw.commute.feature.correctionString
-import uk.jacobw.commute.feature.timestamp
+import uk.jacobw.commute.data.model.Station
+import uk.jacobw.commute.feature.shared.AppBar
+import uk.jacobw.commute.feature.shared.LoadingSpinner
+import uk.jacobw.commute.feature.shared.PlatformText
+import uk.jacobw.commute.feature.shared.correctionString
+import uk.jacobw.commute.feature.shared.timestamp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RouteLayout(
     route: Route,
@@ -52,18 +49,9 @@ fun RouteLayout(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(Res.string.dash_formatted, route.origin.crsCode, route.destination.crsCode)) },
-                navigationIcon = {
-                    IconButton(
-                        onClick = onClickNavigationIcon,
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(Res.string.navigate_back_desc),
-                        )
-                    }
-                },
+            AppBar(
+                title = stringResource(Res.string.dash_formatted, route.origin.crsCode, route.destination.crsCode),
+                onClickNavigationIcon = onClickNavigationIcon,
                 actions = {
                     IconButton(
                         onClick = onClickReverseRoute,
@@ -108,35 +96,37 @@ private fun RouteCard(route: Route) {
                     .padding(16.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Column(
-                modifier =
-                    Modifier
-                        .align(Alignment.CenterStart)
-                        .fillMaxWidth(0.4f),
-            ) {
-                Text(
-                    text = route.origin.crsCode,
-                    style = MaterialTheme.typography.titleLarge,
-                )
-                Text(route.origin.name)
-            }
+            StationTitleSection(
+                station = route.origin,
+                modifier = Modifier.align(Alignment.CenterStart),
+            )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = null,
             )
-            Column(
-                modifier =
-                    Modifier
-                        .align(Alignment.CenterEnd)
-                        .fillMaxWidth(0.4f),
-            ) {
-                Text(
-                    text = route.origin.crsCode,
-                    style = MaterialTheme.typography.titleLarge,
-                )
-                Text(route.destination.name)
-            }
+            StationTitleSection(
+                station = route.destination,
+                modifier = Modifier.align(Alignment.CenterEnd),
+            )
         }
+    }
+}
+
+@Composable
+private fun StationTitleSection(
+    station: Station,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier =
+            modifier
+                .fillMaxWidth(0.4f),
+    ) {
+        Text(
+            text = station.crsCode,
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Text(station.name)
     }
 }
 

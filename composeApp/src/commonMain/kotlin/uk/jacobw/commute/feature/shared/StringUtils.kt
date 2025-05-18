@@ -1,4 +1,4 @@
-package uk.jacobw.commute.feature
+package uk.jacobw.commute.feature.shared
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString

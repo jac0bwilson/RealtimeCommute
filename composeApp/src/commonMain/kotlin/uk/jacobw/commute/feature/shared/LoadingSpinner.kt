@@ -1,4 +1,4 @@
-package uk.jacobw.commute.feature
+package uk.jacobw.commute.feature.shared
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

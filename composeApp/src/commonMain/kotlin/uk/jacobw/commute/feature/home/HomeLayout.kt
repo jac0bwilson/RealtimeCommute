@@ -30,7 +30,6 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,8 +55,8 @@ import realtimecommute.composeapp.generated.resources.home_title
 import realtimecommute.composeapp.generated.resources.train_icon
 import uk.jacobw.commute.data.model.Route
 import uk.jacobw.commute.data.model.Station
+import uk.jacobw.commute.feature.shared.AppBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeLayout(
     stationOptions: List<Station>,
@@ -68,8 +67,9 @@ fun HomeLayout(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(Res.string.home_title)) },
+            AppBar(
+                title = stringResource(Res.string.home_title),
+                onClickNavigationIcon = null,
                 actions = {
                     IconButton(
                         onClick = deleteAllRoutes,
@@ -126,30 +126,36 @@ private fun SavedRoutes(
                             .padding(horizontal = 24.dp, vertical = 16.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(
-                        text = it.origin.name,
-                        modifier =
-                            Modifier
-                                .align(Alignment.CenterStart)
-                                .fillMaxWidth(0.4f),
-                        style = MaterialTheme.typography.titleMedium,
+                    StationName(
+                        station = it.origin,
+                        modifier = Modifier.align(Alignment.CenterStart),
                     )
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                         contentDescription = null,
                     )
-                    Text(
-                        text = it.destination.name,
-                        modifier =
-                            Modifier
-                                .align(Alignment.CenterEnd)
-                                .fillMaxWidth(0.4f),
-                        style = MaterialTheme.typography.titleMedium,
+                    StationName(
+                        station = it.destination,
+                        modifier = Modifier.align(Alignment.CenterEnd),
                     )
                 }
             }
         }
     }
+}
+
+@Composable
+private fun StationName(
+    station: Station,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = station.name,
+        modifier =
+            modifier
+                .fillMaxWidth(0.4f),
+        style = MaterialTheme.typography.titleMedium,
+    )
 }
 
 @Composable

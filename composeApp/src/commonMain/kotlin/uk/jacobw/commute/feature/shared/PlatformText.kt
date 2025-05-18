@@ -1,4 +1,4 @@
-package uk.jacobw.commute.feature
+package uk.jacobw.commute.feature.shared
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
