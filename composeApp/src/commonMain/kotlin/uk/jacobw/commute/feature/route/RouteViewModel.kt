@@ -13,11 +13,10 @@ import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Service
 
 class RouteViewModel(
-    routeRepository: RouteRepository,
+    private val routeRepository: RouteRepository,
     private val realtimeTrainsRepository: RealtimeTrainsRepository,
 ) : ViewModel() {
-    private val _route = MutableStateFlow(routeRepository.selectedRoute)
-    val route = _route.asStateFlow()
+    val route = routeRepository.selectedRoute.asStateFlow()
 
     private val _services = MutableStateFlow<List<Service>>(emptyList())
     val services = _services.asStateFlow()
@@ -26,7 +25,7 @@ class RouteViewModel(
     val isLoading = _isLoading.asStateFlow()
 
     fun reverseRoute() {
-        _route.update { current ->
+        routeRepository.selectedRoute.update { current ->
             current?.let {
                 RouteWithStations(
                     route =
@@ -43,7 +42,7 @@ class RouteViewModel(
 
     fun loadServices() {
         _isLoading.value = true
-        _route.value?.let { route ->
+        routeRepository.selectedRoute.value?.let { route ->
             viewModelScope.launch {
                 realtimeTrainsRepository
                     .getNextServices(route.originStation.crsCode, route.destinationStation.crsCode)

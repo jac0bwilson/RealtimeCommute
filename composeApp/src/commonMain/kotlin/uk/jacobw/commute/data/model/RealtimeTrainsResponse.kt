@@ -29,6 +29,7 @@ data class Location(
     @SerialName("destination") val destinations: List<Destination>,
     @SerialName("gbttBookedArrival") val plannedArrival: String? = null,
     @SerialName("gbttBookedDeparture") val plannedDeparture: String? = null,
+    val crs: String,
     val description: String,
     val realtimeArrival: String? = null,
     val realtimeDeparture: String? = null,

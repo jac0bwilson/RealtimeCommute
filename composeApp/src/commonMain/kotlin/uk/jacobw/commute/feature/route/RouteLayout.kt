@@ -32,13 +32,11 @@ import realtimecommute.composeapp.generated.resources.compare_arrows_icon
 import realtimecommute.composeapp.generated.resources.dash_formatted
 import realtimecommute.composeapp.generated.resources.navigate_back_desc
 import realtimecommute.composeapp.generated.resources.route_no_trains
-import realtimecommute.composeapp.generated.resources.route_platform_changed
-import realtimecommute.composeapp.generated.resources.route_platform_confirmed
-import realtimecommute.composeapp.generated.resources.route_platform_estimated
 import realtimecommute.composeapp.generated.resources.route_reverse_desc
 import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Service
 import uk.jacobw.commute.feature.LoadingSpinner
+import uk.jacobw.commute.feature.PlatformText
 import uk.jacobw.commute.feature.correctionString
 import uk.jacobw.commute.feature.timestamp
 
@@ -199,16 +197,7 @@ private fun ServiceList(
                         )
                     }
 
-                    Text(
-                        stringResource(
-                            when {
-                                it.location.platformChanged -> Res.string.route_platform_changed
-                                it.location.platformConfirmed -> Res.string.route_platform_confirmed
-                                else -> Res.string.route_platform_estimated
-                            },
-                            it.location.platform ?: "Unknown Platform",
-                        ),
-                    )
+                    PlatformText(it.location)
                     Text(it.operator)
                 }
             }

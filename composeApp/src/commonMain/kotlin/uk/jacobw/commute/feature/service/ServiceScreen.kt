@@ -11,8 +11,12 @@ fun ServiceScreen(
     onClickNavigationIcon: () -> Unit,
     viewModel: ServiceViewModel = koinViewModel(),
 ) {
-    val route = viewModel.route
+    val route by viewModel.route.collectAsStateWithLifecycle()
+//    val locationsBeforeRoute by viewModel.locationsBeforeRoute.collectAsStateWithLifecycle()
+//    val locationsOnRoute by viewModel.locationsOnRoute.collectAsStateWithLifecycle()
+//    val locationsAfterRoute by viewModel.locationsAfterRoute.collectAsStateWithLifecycle()
     val locations by viewModel.locations.collectAsStateWithLifecycle()
+    val (locationsBeforeRoute, locationsOnRoute, locationsAfterRoute) = locations
     val isLoadingLocations by viewModel.isLoading.collectAsStateWithLifecycle()
 
     LifecycleStartEffect(Unit) {
@@ -23,7 +27,9 @@ fun ServiceScreen(
 
     ServiceLayout(
         route = route!!,
-        locations = locations,
+        locationsBeforeRoute = locationsBeforeRoute,
+        locationsOnRoute = locationsOnRoute,
+        locationsAfterRoute = locationsAfterRoute,
         isLoadingLocations = isLoadingLocations,
         onClickNavigationIcon = onClickNavigationIcon,
     )
