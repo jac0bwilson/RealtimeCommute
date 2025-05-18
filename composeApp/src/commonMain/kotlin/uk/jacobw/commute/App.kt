@@ -29,7 +29,7 @@ fun App() {
 
             NavHost(
                 navController = navController,
-                startDestination = Routes.HOME.name,
+                startDestination = NavigationRoutes.HomeScreen,
             ) {
                 featureGraph(navController)
             }

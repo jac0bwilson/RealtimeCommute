@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import uk.jacobw.commute.data.RealtimeTrainsRepository
 import uk.jacobw.commute.data.RouteRepository
-import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Location
+import uk.jacobw.commute.data.model.Route
 
 class ServiceViewModel(
     routeRepository: RouteRepository,
@@ -48,7 +48,7 @@ class ServiceViewModel(
 
     private fun partitionLocations(
         locations: List<Location>,
-        route: RouteWithStations,
+        route: Route,
     ): Triple<List<Location>, List<Location>, List<Location>> {
         val beforeOrigin = mutableListOf<Location>()
         val onRoute = mutableListOf<Location>()
@@ -57,7 +57,7 @@ class ServiceViewModel(
         var passedDestination = false
 
         locations.forEach {
-            if (it.crs == route.originStation.crsCode) {
+            if (it.crs == route.origin.crsCode) {
                 passedOrigin = true
             }
 
@@ -67,7 +67,7 @@ class ServiceViewModel(
                 passedOrigin && passedDestination -> afterDestination.add(it)
             }
 
-            if (it.crs == route.destinationStation.crsCode) {
+            if (it.crs == route.destination.crsCode) {
                 passedDestination = true
             }
         }

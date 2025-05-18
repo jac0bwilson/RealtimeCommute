@@ -3,33 +3,36 @@ package uk.jacobw.commute
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 import uk.jacobw.commute.feature.home.HomeScreen
 import uk.jacobw.commute.feature.route.RouteScreen
 import uk.jacobw.commute.feature.service.ServiceScreen
 
 fun NavGraphBuilder.featureGraph(navController: NavController) {
-    composable(route = Routes.HOME.name) {
+    composable<NavigationRoutes.HomeScreen> {
         HomeScreen(
-            onNavigateToRoute = { navController.navigate(Routes.ROUTE.name) },
+            onNavigateToRoute = { navController.navigate(NavigationRoutes.RouteScreen) },
         )
     }
 
-    composable(route = Routes.ROUTE.name) {
+    composable<NavigationRoutes.RouteScreen> {
         RouteScreen(
             onClickNavigationIcon = { navController.popBackStack() },
-            onNavigateToService = { navController.navigate(Routes.SERVICE.name) },
+            onNavigateToService = { navController.navigate(NavigationRoutes.ServiceScreen) },
         )
     }
 
-    composable(route = Routes.SERVICE.name) {
+    composable<NavigationRoutes.ServiceScreen> {
         ServiceScreen(
             onClickNavigationIcon = { navController.popBackStack() },
         )
     }
 }
 
-enum class Routes {
-    HOME,
-    ROUTE,
-    SERVICE,
+sealed class NavigationRoutes {
+    @Serializable data object HomeScreen : NavigationRoutes()
+
+    @Serializable data object RouteScreen : NavigationRoutes()
+
+    @Serializable data object ServiceScreen : NavigationRoutes()
 }

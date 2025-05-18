@@ -5,12 +5,12 @@ import uk.jacobw.commute.data.database.StationEntity
 
 @Serializable
 data class Station(
-    val stationName: String,
+    val name: String,
     val crsCode: String,
 ) {
     fun toStationEntity(): StationEntity =
         StationEntity(
             crsCode = crsCode,
-            name = stationName,
+            name = name,
         )
 }

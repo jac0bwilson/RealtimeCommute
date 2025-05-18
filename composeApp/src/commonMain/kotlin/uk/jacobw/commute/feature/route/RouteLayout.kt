@@ -33,7 +33,7 @@ import realtimecommute.composeapp.generated.resources.dash_formatted
 import realtimecommute.composeapp.generated.resources.navigate_back_desc
 import realtimecommute.composeapp.generated.resources.route_no_trains
 import realtimecommute.composeapp.generated.resources.route_reverse_desc
-import uk.jacobw.commute.data.database.RouteWithStations
+import uk.jacobw.commute.data.model.Route
 import uk.jacobw.commute.data.model.Service
 import uk.jacobw.commute.feature.LoadingSpinner
 import uk.jacobw.commute.feature.PlatformText
@@ -43,7 +43,7 @@ import uk.jacobw.commute.feature.timestamp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RouteLayout(
-    route: RouteWithStations,
+    route: Route,
     services: List<Service>,
     isLoadingServices: Boolean,
     onClickNavigationIcon: () -> Unit,
@@ -53,7 +53,7 @@ fun RouteLayout(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(Res.string.dash_formatted, route.originStation.crsCode, route.destinationStation.crsCode)) },
+                title = { Text(stringResource(Res.string.dash_formatted, route.origin.crsCode, route.destination.crsCode)) },
                 navigationIcon = {
                     IconButton(
                         onClick = onClickNavigationIcon,
@@ -95,7 +95,7 @@ fun RouteLayout(
 }
 
 @Composable
-private fun RouteCard(route: RouteWithStations) {
+private fun RouteCard(route: Route) {
     ElevatedCard(
         modifier =
             Modifier
@@ -115,10 +115,10 @@ private fun RouteCard(route: RouteWithStations) {
                         .fillMaxWidth(0.4f),
             ) {
                 Text(
-                    text = route.originStation.crsCode,
+                    text = route.origin.crsCode,
                     style = MaterialTheme.typography.titleLarge,
                 )
-                Text(route.originStation.name)
+                Text(route.origin.name)
             }
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
@@ -131,10 +131,10 @@ private fun RouteCard(route: RouteWithStations) {
                         .fillMaxWidth(0.4f),
             ) {
                 Text(
-                    text = route.destinationStation.crsCode,
+                    text = route.origin.crsCode,
                     style = MaterialTheme.typography.titleLarge,
                 )
-                Text(route.destinationStation.name)
+                Text(route.destination.name)
             }
         }
     }

@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import uk.jacobw.commute.data.RouteRepository
 import uk.jacobw.commute.data.StationRepository
-import uk.jacobw.commute.data.database.RouteWithStations
+import uk.jacobw.commute.data.model.Route
 import uk.jacobw.commute.data.model.Station
 
 class HomeViewModel(
     private val routeRepository: RouteRepository,
     private val stationRepository: StationRepository,
 ) : ViewModel() {
-    val routes: StateFlow<List<RouteWithStations>> =
+    val routes: StateFlow<List<Route>> =
         routeRepository
             .getAllRoutes()
             .stateIn(
@@ -38,7 +38,7 @@ class HomeViewModel(
 
     private fun findStationByString(value: String): Station? =
         stations.value.find {
-            it.crsCode.lowercase() == value.lowercase() || it.stationName.lowercase() == value.lowercase()
+            it.crsCode.lowercase() == value.lowercase() || it.name.lowercase() == value.lowercase()
         }
 
     fun addRoute(
@@ -50,7 +50,7 @@ class HomeViewModel(
 
         if (originStation != null && destinationStation != null) {
             viewModelScope.launch {
-                routeRepository.insertRoute(originStation, destinationStation)
+                routeRepository.insertRoute(Route(originStation, destinationStation))
             }
             return true
         }
@@ -64,7 +64,7 @@ class HomeViewModel(
         }
     }
 
-    fun setSelectedRoute(route: RouteWithStations) {
+    fun setSelectedRoute(route: Route) {
         routeRepository.selectedRoute.value = route
     }
 }

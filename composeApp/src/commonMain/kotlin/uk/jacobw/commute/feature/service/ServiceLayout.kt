@@ -29,8 +29,8 @@ import org.jetbrains.compose.resources.stringResource
 import realtimecommute.composeapp.generated.resources.Res
 import realtimecommute.composeapp.generated.resources.dash_formatted
 import realtimecommute.composeapp.generated.resources.navigate_back_desc
-import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Location
+import uk.jacobw.commute.data.model.Route
 import uk.jacobw.commute.feature.LoadingSpinner
 import uk.jacobw.commute.feature.PlatformText
 import uk.jacobw.commute.feature.correctionString
@@ -39,7 +39,7 @@ import uk.jacobw.commute.feature.timestamp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceLayout(
-    route: RouteWithStations,
+    route: Route,
     locationsBeforeRoute: List<Location>,
     locationsOnRoute: List<Location>,
     locationsAfterRoute: List<Location>,
@@ -53,8 +53,8 @@ fun ServiceLayout(
                     Text(
                         stringResource(
                             Res.string.dash_formatted,
-                            route.originStation.crsCode,
-                            route.destinationStation.crsCode,
+                            route.origin.crsCode,
+                            route.destination.crsCode,
                         ),
                     )
                 },

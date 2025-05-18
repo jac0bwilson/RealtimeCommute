@@ -12,9 +12,6 @@ fun ServiceScreen(
     viewModel: ServiceViewModel = koinViewModel(),
 ) {
     val route by viewModel.route.collectAsStateWithLifecycle()
-//    val locationsBeforeRoute by viewModel.locationsBeforeRoute.collectAsStateWithLifecycle()
-//    val locationsOnRoute by viewModel.locationsOnRoute.collectAsStateWithLifecycle()
-//    val locationsAfterRoute by viewModel.locationsAfterRoute.collectAsStateWithLifecycle()
     val locations by viewModel.locations.collectAsStateWithLifecycle()
     val (locationsBeforeRoute, locationsOnRoute, locationsAfterRoute) = locations
     val isLoadingLocations by viewModel.isLoading.collectAsStateWithLifecycle()

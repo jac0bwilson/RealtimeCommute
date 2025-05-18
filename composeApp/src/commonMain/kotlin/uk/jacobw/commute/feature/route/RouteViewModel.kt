@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import uk.jacobw.commute.data.RealtimeTrainsRepository
 import uk.jacobw.commute.data.RouteRepository
-import uk.jacobw.commute.data.database.RouteEntity
-import uk.jacobw.commute.data.database.RouteWithStations
+import uk.jacobw.commute.data.model.Route
 import uk.jacobw.commute.data.model.Service
 
 class RouteViewModel(
@@ -27,14 +26,9 @@ class RouteViewModel(
     fun reverseRoute() {
         routeRepository.selectedRoute.update { current ->
             current?.let {
-                RouteWithStations(
-                    route =
-                        RouteEntity(
-                            originCrsCode = current.route.destinationCrsCode,
-                            destinationCrsCode = current.route.originCrsCode,
-                        ),
-                    originStation = current.destinationStation,
-                    destinationStation = current.originStation,
+                Route(
+                    origin = current.destination,
+                    destination = current.origin,
                 )
             }
         }
@@ -45,7 +39,7 @@ class RouteViewModel(
         routeRepository.selectedRoute.value?.let { route ->
             viewModelScope.launch {
                 realtimeTrainsRepository
-                    .getNextServices(route.originStation.crsCode, route.destinationStation.crsCode)
+                    .getNextServices(route.origin.crsCode, route.destination.crsCode)
                     .onSuccess { _services.value = it }
 
                 _isLoading.value = false

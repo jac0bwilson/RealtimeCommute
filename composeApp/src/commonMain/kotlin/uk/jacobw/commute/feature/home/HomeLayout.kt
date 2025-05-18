@@ -54,17 +54,17 @@ import realtimecommute.composeapp.generated.resources.home_input_submit_button
 import realtimecommute.composeapp.generated.resources.home_input_title
 import realtimecommute.composeapp.generated.resources.home_title
 import realtimecommute.composeapp.generated.resources.train_icon
-import uk.jacobw.commute.data.database.RouteWithStations
+import uk.jacobw.commute.data.model.Route
 import uk.jacobw.commute.data.model.Station
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeLayout(
     stationOptions: List<Station>,
-    routes: List<RouteWithStations>,
+    routes: List<Route>,
     addRoute: (String, String) -> Boolean,
     deleteAllRoutes: () -> Unit,
-    onNavigateToRoute: (RouteWithStations) -> Unit,
+    onNavigateToRoute: (Route) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -104,8 +104,8 @@ fun HomeLayout(
 
 @Composable
 private fun SavedRoutes(
-    routes: List<RouteWithStations>,
-    onNavigateToRoute: (RouteWithStations) -> Unit,
+    routes: List<Route>,
+    onNavigateToRoute: (Route) -> Unit,
 ) {
     Column(
         modifier =
@@ -127,7 +127,7 @@ private fun SavedRoutes(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = it.originStation.name,
+                        text = it.origin.name,
                         modifier =
                             Modifier
                                 .align(Alignment.CenterStart)
@@ -139,7 +139,7 @@ private fun SavedRoutes(
                         contentDescription = null,
                     )
                     Text(
-                        text = it.destinationStation.name,
+                        text = it.destination.name,
                         modifier =
                             Modifier
                                 .align(Alignment.CenterEnd)
@@ -244,7 +244,7 @@ private fun StationInput(
     val filteredOptions =
         stationOptions.filter {
             val currentLower = currentValue.lowercase()
-            it.stationName.lowercase().contains(currentLower) || it.crsCode.lowercase().contains(currentLower)
+            it.name.lowercase().contains(currentLower) || it.crsCode.lowercase().contains(currentLower)
         }
 
     ExposedDropdownMenuBox(
@@ -288,9 +288,9 @@ private fun StationInput(
                 LazyColumn {
                     items(filteredOptions) { item ->
                         DropdownMenuItem(
-                            text = { Text(stringResource(Res.string.dash_formatted, item.crsCode, item.stationName)) },
+                            text = { Text(stringResource(Res.string.dash_formatted, item.crsCode, item.name)) },
                             onClick = {
-                                setValue(item.stationName)
+                                setValue(item.name)
                                 expanded = false
                             },
                         )
