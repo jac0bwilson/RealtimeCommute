@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import uk.jacobw.commute.feature.home.HomeScreen
 import uk.jacobw.commute.feature.route.RouteScreen
+import uk.jacobw.commute.feature.service.ServiceScreen
 
 fun NavGraphBuilder.featureGraph(navController: NavController) {
     composable(route = Routes.HOME.name) {
@@ -16,6 +17,13 @@ fun NavGraphBuilder.featureGraph(navController: NavController) {
     composable(route = Routes.ROUTE.name) {
         RouteScreen(
             onClickNavigationIcon = { navController.popBackStack() },
+            onNavigateToService = { navController.navigate(Routes.SERVICE.name) },
+        )
+    }
+
+    composable(route = Routes.SERVICE.name) {
+        ServiceScreen(
+            onClickNavigationIcon = { navController.popBackStack() },
         )
     }
 }
@@ -23,4 +31,5 @@ fun NavGraphBuilder.featureGraph(navController: NavController) {
 enum class Routes {
     HOME,
     ROUTE,
+    SERVICE,
 }

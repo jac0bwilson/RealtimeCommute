@@ -53,4 +53,8 @@ class RouteViewModel(
             }
         }
     }
+
+    fun selectService(service: Service) {
+        realtimeTrainsRepository.selectedService = service
+    }
 }

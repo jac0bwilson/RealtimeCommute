@@ -23,13 +23,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -45,6 +39,8 @@ import realtimecommute.composeapp.generated.resources.route_reverse_desc
 import uk.jacobw.commute.data.database.RouteWithStations
 import uk.jacobw.commute.data.model.Service
 import uk.jacobw.commute.feature.LoadingSpinner
+import uk.jacobw.commute.feature.correctionString
+import uk.jacobw.commute.feature.timestamp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +50,7 @@ fun RouteLayout(
     isLoadingServices: Boolean,
     onClickNavigationIcon: () -> Unit,
     onClickReverseRoute: () -> Unit,
+    onClickService: (Service) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -93,7 +90,7 @@ fun RouteLayout(
             if (isLoadingServices) {
                 LoadingSpinner()
             } else {
-                ServiceList(services)
+                ServiceList(services, onClickService)
             }
         }
     }
@@ -146,7 +143,10 @@ private fun RouteCard(route: RouteWithStations) {
 }
 
 @Composable
-private fun ServiceList(services: List<Service>) {
+private fun ServiceList(
+    services: List<Service>,
+    onClickService: (Service) -> Unit,
+) {
     Column(
         modifier =
             Modifier
@@ -165,6 +165,7 @@ private fun ServiceList(services: List<Service>) {
 
         services.forEach {
             OutlinedCard(
+                onClick = { onClickService(it) },
                 modifier =
                     Modifier
                         .fillMaxWidth(),
@@ -177,20 +178,23 @@ private fun ServiceList(services: List<Service>) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        if (it.detail.plannedDeparture == it.detail.realtimeDeparture) {
+                        val plannedDeparture = it.location.plannedDeparture ?: "Unknown"
+                        val realtimeDeparture = it.location.realtimeDeparture ?: "Unknown"
+
+                        if (plannedDeparture == realtimeDeparture) {
                             Text(
-                                text = it.detail.plannedDeparture.timestamp(),
+                                text = plannedDeparture.timestamp(),
                                 style = MaterialTheme.typography.titleLarge,
                             )
                         } else {
                             Text(
-                                text = correctionString(it.detail.plannedDeparture, it.detail.realtimeDeparture),
+                                text = correctionString(plannedDeparture, realtimeDeparture),
                                 style = MaterialTheme.typography.titleLarge,
                             )
                         }
 
                         Text(
-                            text = it.detail.destinations.joinToString("/") { it.description },
+                            text = it.location.destinations.joinToString("/") { it.description },
                             style = MaterialTheme.typography.titleLarge,
                         )
                     }
@@ -198,11 +202,11 @@ private fun ServiceList(services: List<Service>) {
                     Text(
                         stringResource(
                             when {
-                                it.detail.platformChanged -> Res.string.route_platform_changed
-                                it.detail.platformConfirmed -> Res.string.route_platform_confirmed
+                                it.location.platformChanged -> Res.string.route_platform_changed
+                                it.location.platformConfirmed -> Res.string.route_platform_confirmed
                                 else -> Res.string.route_platform_estimated
                             },
-                            it.detail.platform,
+                            it.location.platform ?: "Unknown Platform",
                         ),
                     )
                     Text(it.operator)
@@ -210,23 +214,4 @@ private fun ServiceList(services: List<Service>) {
             }
         }
     }
-}
-
-private fun correctionString(
-    intended: String,
-    actual: String,
-): AnnotatedString =
-    buildAnnotatedString {
-        withStyle(SpanStyle(color = Color.Red, textDecoration = TextDecoration.LineThrough)) {
-            append(intended.timestamp())
-        }
-        append(" ${actual.timestamp()}")
-    }
-
-private fun String.timestamp(): String {
-    if (this.all { char -> char.isDigit() } && this.length == 4) {
-        return this.substring(0, 2) + ":" + this.substring(2)
-    }
-
-    return this
 }

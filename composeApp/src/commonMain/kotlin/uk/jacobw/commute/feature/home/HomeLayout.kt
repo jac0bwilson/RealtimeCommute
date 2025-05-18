@@ -213,7 +213,10 @@ private fun JourneyInput(
             )
 
             Button(
-                onClick = ::submit,
+                onClick = {
+                    keyboardController?.hide()
+                    submit()
+                },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = origin.value.isNotBlank() && destination.value.isNotBlank(),
             ) {

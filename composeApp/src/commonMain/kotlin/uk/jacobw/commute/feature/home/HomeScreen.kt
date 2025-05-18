@@ -8,8 +8,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = koinViewModel(),
     onNavigateToRoute: () -> Unit,
+    viewModel: HomeViewModel = koinViewModel(),
 ) {
     LifecycleStartEffect(Unit) {
         viewModel.loadStations()

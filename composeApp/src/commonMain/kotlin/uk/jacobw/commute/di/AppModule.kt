@@ -20,6 +20,7 @@ import uk.jacobw.commute.data.network.realtimetrains.RealtimeTrainsApi
 import uk.jacobw.commute.data.network.station.StationApi
 import uk.jacobw.commute.feature.home.HomeViewModel
 import uk.jacobw.commute.feature.route.RouteViewModel
+import uk.jacobw.commute.feature.service.ServiceViewModel
 
 val appModule =
     module {
@@ -58,4 +59,5 @@ val appModule =
 
         viewModel { HomeViewModel(get(), get()) }
         viewModel { RouteViewModel(get(), get()) }
+        viewModel { ServiceViewModel(get(), get()) }
     }
