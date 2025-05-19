@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import realtimecommute.composeapp.generated.resources.Res
 import realtimecommute.composeapp.generated.resources.dash_formatted
 import realtimecommute.composeapp.generated.resources.home_delete_desc
@@ -304,5 +305,33 @@ private fun StationInput(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun HomeLayoutPreview() {
+    MaterialTheme {
+        HomeLayout(
+            stationOptions = emptyList(),
+            routes =
+                listOf(
+                    Route(
+                        origin =
+                            Station(
+                                name = "Farringdon",
+                                crsCode = "ZFD",
+                            ),
+                        destination =
+                            Station(
+                                name = "London Paddington",
+                                crsCode = "PAD",
+                            ),
+                    ),
+                ),
+            addRoute = { _, _ -> true },
+            deleteAllRoutes = { },
+            onNavigateToRoute = { },
+        )
     }
 }

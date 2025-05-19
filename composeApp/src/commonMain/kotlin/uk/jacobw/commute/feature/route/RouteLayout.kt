@@ -24,11 +24,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import realtimecommute.composeapp.generated.resources.Res
 import realtimecommute.composeapp.generated.resources.compare_arrows_icon
 import realtimecommute.composeapp.generated.resources.dash_formatted
 import realtimecommute.composeapp.generated.resources.route_no_trains
 import realtimecommute.composeapp.generated.resources.route_reverse_desc
+import uk.jacobw.commute.data.model.Destination
+import uk.jacobw.commute.data.model.Location
 import uk.jacobw.commute.data.model.Route
 import uk.jacobw.commute.data.model.Service
 import uk.jacobw.commute.data.model.Station
@@ -192,5 +195,48 @@ private fun ServiceList(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun RouteLayoutPreview() {
+    MaterialTheme {
+        RouteLayout(
+            route =
+                Route(
+                    origin =
+                        Station(
+                            name = "Farringdon",
+                            crsCode = "ZFD",
+                        ),
+                    destination =
+                        Station(
+                            name = "London Paddington",
+                            crsCode = "PAD",
+                        ),
+                ),
+            services =
+                listOf(
+                    Service(
+                        location =
+                            Location(
+                                destinations =
+                                    listOf(
+                                        Destination(description = "Destination"),
+                                    ),
+                                crs = "",
+                                description = "",
+                            ),
+                        serviceUid = "",
+                        operator = "Train Company",
+                        _runDate = "2025-05-19",
+                    ),
+                ),
+            isLoadingServices = false,
+            onClickNavigationIcon = { },
+            onClickReverseRoute = { },
+            onClickService = { },
+        )
     }
 }

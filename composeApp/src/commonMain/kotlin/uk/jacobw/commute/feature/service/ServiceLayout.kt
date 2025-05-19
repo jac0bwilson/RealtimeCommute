@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import realtimecommute.composeapp.generated.resources.Res
 import realtimecommute.composeapp.generated.resources.dash_formatted
+import uk.jacobw.commute.data.model.Destination
 import uk.jacobw.commute.data.model.Location
 import uk.jacobw.commute.data.model.Route
+import uk.jacobw.commute.data.model.Station
 import uk.jacobw.commute.feature.shared.AppBar
 import uk.jacobw.commute.feature.shared.LoadingSpinner
 import uk.jacobw.commute.feature.shared.PlatformText
@@ -155,5 +159,70 @@ private fun LocationItem(location: Location) {
         }
 
         PlatformText(location)
+    }
+}
+
+@Preview
+@Composable
+private fun ServiceLayoutPreview() {
+    MaterialTheme {
+        ServiceLayout(
+            route =
+                Route(
+                    origin =
+                        Station(
+                            name = "Farringdon",
+                            crsCode = "ZFD",
+                        ),
+                    destination =
+                        Station(
+                            name = "London Paddington",
+                            crsCode = "PAD",
+                        ),
+                ),
+            locationsBeforeRoute =
+                listOf(
+                    Location(
+                        destinations =
+                            listOf(
+                                Destination(description = "Destination"),
+                            ),
+                        crs = "",
+                        description = "Place 0",
+                    ),
+                ),
+            locationsOnRoute =
+                listOf(
+                    Location(
+                        destinations =
+                            listOf(
+                                Destination(description = "Destination"),
+                            ),
+                        crs = "",
+                        description = "Place 1",
+                    ),
+                    Location(
+                        destinations =
+                            listOf(
+                                Destination(description = "Place 2"),
+                            ),
+                        crs = "",
+                        description = "",
+                    ),
+                ),
+            locationsAfterRoute =
+                listOf(
+                    Location(
+                        destinations =
+                            listOf(
+                                Destination(description = "Destination"),
+                            ),
+                        crs = "",
+                        description = "Place 2",
+                    ),
+                ),
+            isLoadingLocations = false,
+            onClickNavigationIcon = { },
+        )
     }
 }
