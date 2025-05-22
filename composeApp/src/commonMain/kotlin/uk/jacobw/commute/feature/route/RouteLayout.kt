@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -37,7 +38,7 @@ import uk.jacobw.commute.data.model.Service
 import uk.jacobw.commute.data.model.Station
 import uk.jacobw.commute.feature.shared.AppBar
 import uk.jacobw.commute.feature.shared.LoadingSpinner
-import uk.jacobw.commute.feature.shared.PlatformText
+import uk.jacobw.commute.feature.shared.PlatformIndicator
 import uk.jacobw.commute.feature.shared.correctionString
 import uk.jacobw.commute.feature.shared.timestamp
 
@@ -161,37 +162,43 @@ private fun ServiceList(
                     Modifier
                         .fillMaxWidth(),
             ) {
-                Column(
+                Row(
                     modifier =
                         Modifier
                             .padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        val plannedDeparture = it.location.plannedDeparture ?: "Unknown"
-                        val realtimeDeparture = it.location.realtimeDeparture ?: "Unknown"
+                    Column {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            val plannedDeparture = it.location.plannedDeparture ?: "Unknown"
+                            val realtimeDeparture = it.location.realtimeDeparture ?: "Unknown"
 
-                        if (plannedDeparture == realtimeDeparture) {
+                            if (plannedDeparture == realtimeDeparture) {
+                                Text(
+                                    text = plannedDeparture.timestamp(),
+                                    style = MaterialTheme.typography.titleLarge,
+                                )
+                            } else {
+                                Text(
+                                    text = correctionString(plannedDeparture, realtimeDeparture),
+                                    style = MaterialTheme.typography.titleLarge,
+                                )
+                            }
+
                             Text(
-                                text = plannedDeparture.timestamp(),
-                                style = MaterialTheme.typography.titleLarge,
-                            )
-                        } else {
-                            Text(
-                                text = correctionString(plannedDeparture, realtimeDeparture),
+                                text = it.location.destinations.joinToString("/") { it.description },
                                 style = MaterialTheme.typography.titleLarge,
                             )
                         }
 
-                        Text(
-                            text = it.location.destinations.joinToString("/") { it.description },
-                            style = MaterialTheme.typography.titleLarge,
-                        )
+                        Text(it.operator)
                     }
 
-                    PlatformText(it.location)
-                    Text(it.operator)
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    PlatformIndicator(it.location.platformState)
                 }
             }
         }

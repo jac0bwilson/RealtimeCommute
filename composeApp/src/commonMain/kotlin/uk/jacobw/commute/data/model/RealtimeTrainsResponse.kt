@@ -33,12 +33,32 @@ data class Location(
     val description: String,
     val realtimeArrival: String? = null,
     val realtimeDeparture: String? = null,
-    val platform: String? = null,
-    val platformConfirmed: Boolean = false,
-    val platformChanged: Boolean = false,
-)
+    @SerialName("platform") private val _platform: String? = null,
+    @SerialName("platformConfirmed") private val _platformConfirmed: Boolean = false,
+    @SerialName("platformChanged") private val _platformChanged: Boolean = false,
+) {
+    val platformState: Platform =
+        when {
+            _platform != null && _platformChanged -> Platform(_platform, PlatformStatus.CHANGED)
+            _platform != null && _platformConfirmed -> Platform(_platform, PlatformStatus.CONFIRMED)
+            else -> Platform(_platform ?: "?", PlatformStatus.UNKNOWN)
+        }
+}
 
 @Serializable
 data class Destination(
     val description: String,
 )
+
+@Serializable
+data class Platform(
+    val value: String,
+    val status: PlatformStatus,
+)
+
+@Serializable
+enum class PlatformStatus {
+    CONFIRMED,
+    CHANGED,
+    UNKNOWN,
+}

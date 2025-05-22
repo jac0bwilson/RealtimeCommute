@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,7 +32,7 @@ import uk.jacobw.commute.data.model.Route
 import uk.jacobw.commute.data.model.Station
 import uk.jacobw.commute.feature.shared.AppBar
 import uk.jacobw.commute.feature.shared.LoadingSpinner
-import uk.jacobw.commute.feature.shared.PlatformText
+import uk.jacobw.commute.feature.shared.PlatformIndicator
 import uk.jacobw.commute.feature.shared.correctionString
 import uk.jacobw.commute.feature.shared.timestamp
 
@@ -138,27 +140,27 @@ private fun LocationItem(location: Location) {
     val plannedTime = location.plannedDeparture ?: location.plannedArrival ?: "Unknown"
     val actualTime = location.realtimeDeparture ?: location.realtimeArrival ?: "Unknown"
 
-    Column(
+    Row(
         modifier =
             Modifier
                 .padding(horizontal = 16.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            if (plannedTime == actualTime) {
-                Text(
-                    text = plannedTime.timestamp(),
-                )
-            } else {
-                Text(
-                    text = correctionString(plannedTime, actualTime),
-                )
-            }
-            Text(location.description)
+        if (plannedTime == actualTime) {
+            Text(
+                text = plannedTime.timestamp(),
+            )
+        } else {
+            Text(
+                text = correctionString(plannedTime, actualTime),
+            )
         }
+        Text(location.description)
 
-        PlatformText(location)
+        Spacer(modifier = Modifier.weight(1f))
+
+        PlatformIndicator(location.platformState)
     }
 }
 

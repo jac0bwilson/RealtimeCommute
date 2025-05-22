@@ -12,7 +12,4 @@
 
     <string name="route_reverse_desc">Reverse route</string>
     <string name="route_no_trains">Unable to find any trains in the next 2 hours</string>
-    <string name="route_platform_changed">Now departing from platform %1$s</string>
-    <string name="route_platform_confirmed">Departing from platform %1$s</string>
-    <string name="route_platform_estimated">Expected to depart from platform %1$s</string>
 </resources>
