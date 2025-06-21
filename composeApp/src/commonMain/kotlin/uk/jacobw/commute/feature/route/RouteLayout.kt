@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -165,10 +164,14 @@ private fun ServiceList(
                 Row(
                     modifier =
                         Modifier
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Column {
+                    Column(
+                        modifier = Modifier.weight(0.85f),
+                    ) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
@@ -195,8 +198,6 @@ private fun ServiceList(
 
                         Text(it.operator)
                     }
-
-                    Spacer(modifier = Modifier.weight(1f))
 
                     PlatformIndicator(it.location.platformState)
                 }
